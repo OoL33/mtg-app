@@ -19,8 +19,8 @@ const NewDeckForm = (props) => {
     event.preventDefault()
 
     try {
-      //const userId = props.match.params.id
-      const response = await fetch(`/api/v1/decks`, {
+      const userId = props.match.params.id
+      const response = await fetch(`/api/v1/users/${userId}/decks`, {
         method: "POST",
         credentials: "same-origin",
         headers: {
