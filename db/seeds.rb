@@ -3,4 +3,4 @@
 #
 alana = User.create(email: "arcanevirgo@magicdeck.com", password: "secretlair")
 
-deck_one = Deck.create(name: "green deck", description: "only green cards")
+deck_one = Deck.create(id: 1, name: "green deck", description: "only green cards", user_id: 1)

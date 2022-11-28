@@ -1,5 +1,5 @@
 import React from "react"
-import card_game from "../../../assets/images/noun_magic_cards.svg"
+import card_game from "../../../assets/images/noun-magic-cards.svg"
 
 const DeckTile = (props) => {
   return(

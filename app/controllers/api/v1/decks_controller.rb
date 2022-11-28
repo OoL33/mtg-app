@@ -1,18 +1,44 @@
 class Api::V1::DecksController < ApiController
+	before_action :authenticate_user!
+
 	def index
-		render json: Deck.order(name: :asc)
+		decks = Deck.all
+		render json: { decks: decks }
 	end
 
 	def show
-		render json: Deck.find(params[:id])
+		deck = Deck.find_by(params[:id])
+		render json: { deck: decks }, serializer: DeckSerializer
 	end
 
 	def create
+		current_user = current_user.find(:id)
 		deck = Deck.new(deck_params)
-		deck.user = current_user
 
 		if deck.save
-			render json: { deck: deck }
+			render json: { deck: deck }, serializer: DeckSerializer
+		else
+			render json: { error: deck.errors.full_messages }, status: :unprocessable_entity
+		end
+	end
+
+	def create
+		#current_user = current_user.find(:id)
+		deck = Deck.find_by(deck_params)
+
+		if deck.update(deck_params)
+			render json: { deck: deck }, serializer: DeckSerializer
+		else
+			render json: { error: deck.errors.full_messages }, status: :unprocessable_entity
+		end
+	end
+
+	def destroy
+		#current_user = current_user.find(:id)
+		deck = Deck.find_by(params[:id])
+
+		if deck.destroy
+			head :no_content
 		else
 			render json: { error: deck.errors.full_messages }, status: :unprocessable_entity
 		end
@@ -20,7 +46,13 @@ class Api::V1::DecksController < ApiController
 
 	private
 
+	def authenticate_user
+		if !user_signed_in?
+			render json: {error: ["You need to be signed in first"]}
+		end
+	end
+
 	def deck_params
-		params.require(:deck).permit(:name, :description)
+		params.require(:deck).permit(:name, :description, :user_id)
 	end
 end
