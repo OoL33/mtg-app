@@ -4,6 +4,9 @@ class Api::V1::DecksController < ApiController
 	def index
 		decks = Deck.all
 		render json: { decks: decks }
+
+		user has many decks
+		current_user.decks
 	end
 
 	def show
@@ -22,7 +25,7 @@ class Api::V1::DecksController < ApiController
 		end
 	end
 
-	def create
+	def update
 		#current_user = current_user.find(:id)
 		deck = Deck.find_by(deck_params)
 
