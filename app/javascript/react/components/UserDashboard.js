@@ -8,7 +8,6 @@ const UserDashboard = (props) => {
   const fetchUserDecks = async() => {
     try {
 			//const userId = props.match.params.id 
-			debugger
       const response = await fetch(`/api/v1/users/${props.match.params.id}/decks`)
       if (!response.ok) {
         const errorMessage = `${response.status} (${response.statusText})`

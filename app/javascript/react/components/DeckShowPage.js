@@ -7,16 +7,13 @@ const DeckShowPage = (props) => {
 		try {
       //const id = props.match.params.id
 			const deckId = props.match.params.id
-			debugger
       const response = await fetch(`/api/v1/decks/${deckId}`)
       if(!response.ok) {
         const errorMessage = `${response.status} (${response.statusText})`
         throw new Error(errorMessage)
       }
       const responseBody = await response.json()
-			debugger
 			const singleDeckData = responseBody.decks
-			debugger
       setDeck(singleDeckData) 
     } catch (error) {
       console.error(`Error in fetch: ${error.message}`)
