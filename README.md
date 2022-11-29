@@ -53,15 +53,6 @@ To get a local copy up and running follow these simple example steps.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- CONTACT -->
-## Contact
-
-Alana Lee - [![LinkedIn][linkedin-shield]][linkedin-url] - [![Gmail][Gmail-shield]][Gmail-url]
-
-Project Link: [https://github.com/OoL33/breakable_toy](https://github.com/OoL33/breakable_toy)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
