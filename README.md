@@ -3,13 +3,22 @@
 <h3 align="center">MTG Deck Builder</h3>
 
   <p align="center">
-    An application that allows you to store and manage your Magic The Gathering deck builds.
+    Store and manage your Magic The Gathering deck builds!
     <br />
     <a href="https://github.com/OoL33/breakable_toy"><strong>Explore the docs »</strong></a>
     <br />
 </div>
 
-### Built With
+<!-- ABOUT THE PROJECT -->
+## About The Project
+  This application allows users to store and manage your Magic The Gathering deck builds through CRUD actions.
+
+  ## *Currently under development*
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- BUILT WITH -->
+## Built With
 
 * [![Yarn][Yarnpkg.com]][Yarn-url]
 * [![React][React.js]][React-url]
