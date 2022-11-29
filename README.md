@@ -26,7 +26,10 @@ To get a local copy up and running follow these simple example steps.
   ```sh
   brew install yarn
   ```
-
+* lodash (via yarn, for ErrorList JSON is empty checking)
+  ```sh
+  yarn add lodash
+  ```
 
 ### Installation
 
