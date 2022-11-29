@@ -9,7 +9,15 @@
     <br />
 </div>
 
+### Built With
 
+* [![Yarn][Yarnpkg.com]][Yarn-url]
+* [![React][React.js]][React-url]
+* [![React Router][Reactrouter.com]][ReactRouter-url]
+* [![PostgreSQL][Postgresql.org]][Postgresql-url]
+* [![Ruby on Rails][Rubyonrails.org]][Ruby on Rails-url]
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
