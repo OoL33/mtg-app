@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import ErrorList from "./ErrorList"
 import { Redirect } from "react-router-dom"
 
 const NewDeckForm = (props) => {
@@ -7,6 +8,7 @@ const NewDeckForm = (props) => {
     name: "",
     description: ""
   })
+	const [errors, setErrors] = useState({})
 
   const handleInputChange = (event) => {
     setNewDeck({
@@ -15,38 +17,56 @@ const NewDeckForm = (props) => {
     })
   }
 
-  const postNewDeck = async(event) => {
-    event.preventDefault()
+	const validFormSubmission = () => {
+		let submitErrors = {}
+		const requiredFields = ["name", "description"]
+		requiredFields.forEach(field => {
+			if (newDeck[field].trim() === "") {
+				submitErrors = {
+					...submitErrors,
+				[field]: "is blank"
+				}
+			}
+		})
+	setErrors(submitErrors)
+	return _.isEmpty(submitErrors)
+}
 
-    try {
-      const userId = props.match.params.id
-      const response = await fetch(`/api/v1/users/${userId}/decks`, {
-        method: "POST",
-        credentials: "same-origin",
-        headers: {
-					'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ deck: newDeck })
-      })
-      if(!response.ok) {
-        const errorMessage = `${response.status} (${response.statusText})`
-        throw new Error(errorMessage)
-      }
-      const responseBody = await response.json()
-      setNewDeck(responseBody.deck)
-      setShouldRedirect(true)
-    } catch (error) {
-      console.error(`Error in fetch: ${error.message}`)
-    }
-  }
+  const postNewDeck = async(event) => {
+  	event.preventDefault()
+		if (validFormSubmission()) {
+    	try {
+      	//const userId = props.match.params.id
+      	const response = await fetch(`/api/v1/users/current/decks`, {
+        	method: "POST",
+        	credentials: "same-origin",
+        	headers: {
+						'Accept': 'application/json',
+          	'Content-Type': 'application/json'
+        	},
+        	body: JSON.stringify({ deck: newDeck })
+      	})
+      	if(!response.ok) {
+        	const errorMessage = `${response.status} (${response.statusText})`
+        	throw new Error(errorMessage)
+      	}
+      	const responseBody = await response.json()
+      	setNewDeck(responseBody.deck)
+      	setShouldRedirect(true)
+    	} catch (error) {
+      	console.error(`Error in fetch: ${error.message}`)
+    	}
+		}
+	}
 
   if (shouldRedirect) {
-    return <Redirect to='/'/>
+    return <Redirect to='/users/current'/>
   }
 
   return(
+		<div className="grid-container form-container">
     <form onSubmit={postNewDeck}>
+			<ErrorList errors={errors}/>
       <label>
         Deck Name:
         <input 
@@ -74,6 +94,7 @@ const NewDeckForm = (props) => {
 					/>
       </button>
     </form>
+		</div>
   )
 }
 

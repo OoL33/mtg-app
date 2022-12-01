@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react"
 const DeckShowPage = (props) => {
 	const [deck, setDeck] = useState([])
 
-	const fetchDecks = async() => {
+	const fetchDeck = async() => {
 		try {
       //const id = props.match.params.id
 			const deckId = props.match.params.id
@@ -21,7 +21,7 @@ const DeckShowPage = (props) => {
 	}
 
 	useEffect(() => {
-		fetchDecks()
+		fetchDeck()
 	}, [])
 
   return(
