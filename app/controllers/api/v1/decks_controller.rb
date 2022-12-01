@@ -5,18 +5,19 @@ class Api::V1::DecksController < ApiController
 		decks = Deck.all
 		render json: { decks: decks }
 
-		user has many decks
-		current_user.decks
+		#user has many decks
+		#current_user.decks
+		user = current_user.decks
 	end
 
 	def show
-		deck = Deck.find_by(params[:id])
-		render json: { deck: decks }, serializer: DeckSerializer
+		decks = current_user.decks
+		render json: { decks: decks }
 	end
 
 	def create
-		current_user = current_user.find(:id)
-		deck = Deck.new(deck_params)
+		#current_user = current_user.find(:id)
+		deck = current_user.decks.new(deck_params)
 
 		if deck.save
 			render json: { deck: deck }, serializer: DeckSerializer
@@ -25,7 +26,7 @@ class Api::V1::DecksController < ApiController
 		end
 	end
 
-	def update
+=begin 	def update
 		#current_user = current_user.find(:id)
 		deck = Deck.find_by(deck_params)
 
@@ -46,12 +47,13 @@ class Api::V1::DecksController < ApiController
 			render json: { error: deck.errors.full_messages }, status: :unprocessable_entity
 		end
 	end
+=end
 
 	private
 
 	def authenticate_user
 		if !user_signed_in?
-			render json: {error: ["You need to be signed in first"]}
+			render json: { error: ["You need to be signed in first"] }
 		end
 	end
 

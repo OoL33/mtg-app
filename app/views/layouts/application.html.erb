@@ -3,25 +3,29 @@
 <head>
   <title>MTG Deck Builder</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<style>
+	@import url('https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap');
+	</style>
   <%= stylesheet_link_tag 'application', media: 'all' %>
   <%= csrf_meta_tags %>
 </head>
 <body>
-  
+  <div class="nav-bar">
   <nav class="top-bar">
     <h1><a href="/">MTG Deck Builder</a></h1>
 
     <section class="top-bar-section">
       <ul class="right">
         <%- if current_user -%>
-          <li><%= link_to 'Sign Out', destroy_user_session_path, method: :delete %></li>
+          <li class="clear button"><%= link_to 'Sign Out', destroy_user_session_path, method: :delete %></li>
         <%- else -%>
-          <li><%= link_to 'Sign Up', new_user_registration_path %></li>
-          <li><%= link_to 'Sign In', new_user_session_path %></li>
+          <li class="clear button"><%= link_to 'Sign Up', new_user_registration_path %></li>
+          <li class="clear button"><%= link_to 'Sign In', new_user_session_path %></li>
         <%- end -%>
       </ul>
     </section>
   </nav>
+	<div class="nav-bar">
 
   <%- flash.each do |key, value| -%>
     <div class="flash flash-<%= key %>">

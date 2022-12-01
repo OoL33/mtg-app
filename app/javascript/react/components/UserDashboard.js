@@ -2,20 +2,19 @@ import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import DeckTile from "./DeckTile"
 
-const UserDashboard = (props) => {
+const UserDashboard = () => {
   const [getUserDecks, setUserDecks] = useState([])
 
   const fetchUserDecks = async() => {
     try {
-			//const userId = props.match.params.id 
-      const response = await fetch(`/api/v1/users/${props.match.params.id}/decks`)
+      const response = await fetch(`/api/v1/users/current`)
       if (!response.ok) {
         const errorMessage = `${response.status} (${response.statusText})`
         throw new Error(errorMessage)
       }
       const responseBody = await response.json()
-			const decksData = responseBody.decks
-      setUserDecks(decksData)
+			const currentDecks = responseBody.user.decks
+      setUserDecks(currentDecks)
     } catch (error) {
       console.error(`Error in Fetch: ${error.message}`)
     }
@@ -28,7 +27,7 @@ const UserDashboard = (props) => {
 	const deckTiles = getUserDecks.map((deck) => {
 		return(
 			<Link to={`/decks/${deck.id}`} key={deck.id}>
-				<DeckTile deck={deck} />
+				<DeckTile key={deck.id} deck={deck} />
 			</Link>
 		)
 	})

@@ -2,7 +2,9 @@ import React from "react"
 
 const IndexPage = () => {
 	return(
-		<h1>IndexPage.js</h1>
+		<div>
+			<h1>IndexPage.js</h1>
+		</div>
 	)
 }
 
