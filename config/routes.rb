@@ -2,10 +2,9 @@ Rails.application.routes.draw do
   root 'homes#index'
   devise_for :users 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-	# get '/decks', to: 'homes#authenticated'
 	get '/users/:id', to: 'homes#authenticated'
-	# get '/users/:user_id/decks/new', to: 'homes#authenticated'
-	# get '/users/:user_id/decks/:id', to: 'decks#show'
+	get 'decks/new', to: 'homes#authenticated'
+	get '/decks/:id', to: 'homes#authenticated'
 
 
 	# user dashboard
@@ -25,6 +24,4 @@ Rails.application.routes.draw do
 				resources :decks, only: [:index, :show, :create]
 		end
 	end
-
-	get '*path', to: 'homes#index', via: :all 
 end

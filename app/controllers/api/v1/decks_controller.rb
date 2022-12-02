@@ -13,7 +13,7 @@ class Api::V1::DecksController < ApiController
 	def show
 		decks = current_user.decks
 		deck = decks.find_by(id: params[:id])
-		render json: {decks: deck}
+		render json: { decks: deck }
 	end
 
 	def create
@@ -21,9 +21,9 @@ class Api::V1::DecksController < ApiController
 		deck = current_user.decks.new(deck_params)
 
 		if deck.save
-			render json: { deck: deck }, serializer: DeckSerializer
+			render json: { decks: deck }, serializer: DeckSerializer
 		else
-			render json: { error: deck.errors.full_messages }, status: :unprocessable_entity
+			render json: { error: decks.errors.full_messages }, status: :unprocessable_entity
 		end
 	end
 
