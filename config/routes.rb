@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 	# get '/decks', to: 'homes#authenticated'
 	get '/users/:id', to: 'homes#authenticated'
-	get '/users/:user_id/decks/new', to: 'homes#authenticated'
-	get '/users/:user_id/decks/:id', to: 'decks#show'
+	# get '/users/:user_id/decks/new', to: 'homes#authenticated'
+	# get '/users/:user_id/decks/:id', to: 'decks#show'
 
 
 	# user dashboard
