@@ -12,7 +12,8 @@ class Api::V1::DecksController < ApiController
 
 	def show
 		decks = current_user.decks
-		render json: { decks: decks }
+		deck = decks.find_by(id: params[:id])
+		render json: {decks: deck}
 	end
 
 	def create
