@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import ErrorList from "./ErrorList"
+import _ from "lodash"
 import { Redirect } from "react-router-dom"
 
 const NewDeckForm = (props) => {
@@ -17,50 +18,57 @@ const NewDeckForm = (props) => {
     })
   }
 
-	const validFormSubmission = () => {
+	const validForSubmission = () => {
 		let submitErrors = {}
 		const requiredFields = ["name", "description"]
 		requiredFields.forEach(field => {
 			if (newDeck[field].trim() === "") {
 				submitErrors = {
 					...submitErrors,
-				[field]: "is blank"
+					[field]: "is blank"
 				}
 			}
 		})
-	setErrors(submitErrors)
-	return _.isEmpty(submitErrors)
-}
+		setErrors(submitErrors)
+		return _.isEmpty(submitErrors)
+	}
 
   const postNewDeck = async(event) => {
-  	event.preventDefault()
-		if (validFormSubmission()) {
-    	try {
+		event.preventDefault()
+
+		if (validForSubmission()) {
+			try {
       	//const userId = props.match.params.id
-      	const response = await fetch(`/api/v1/users/current/decks`, {
-        	method: "POST",
-        	credentials: "same-origin",
-        	headers: {
+				const response = await fetch(`/api/v1/decks`, {
+					method: "POST",
+					credentials: "same-origin",
+					headers: {
 						'Accept': 'application/json',
-          	'Content-Type': 'application/json'
-        	},
-        	body: JSON.stringify({ deck: newDeck })
-      	})
-      	if(!response.ok) {
-        	const errorMessage = `${response.status} (${response.statusText})`
-        	throw new Error(errorMessage)
-      	}
-      	const responseBody = await response.json()
-      	setNewDeck(responseBody.deck)
-      	setShouldRedirect(true)
-    	} catch (error) {
-      	console.error(`Error in fetch: ${error.message}`)
-    	}
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ decks: newDeck })
+				})
+				if(!response.ok) {
+					const errorMessage = `${response.status} (${response.statusText})`
+					throw new Error(errorMessage)
+				}
+				const responseBody = await response.json()
+				if (responseBody.errors) {
+
+					setErrors(responseBody.errors)
+				} else {
+					setShouldRedirect(true)
+				}
+			} catch (error) {
+				console.error(`Error in fetch: ${error.message}`)
+			}
 		}
 	}
 
+
+
   if (shouldRedirect) {
-    return <Redirect to='/users/current'/>
+    return <Redirect to={`/users/${props.match.params.id}`} />
   }
 
   return(
