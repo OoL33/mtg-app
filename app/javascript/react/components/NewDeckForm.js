@@ -46,17 +46,18 @@ const NewDeckForm = (props) => {
 						'Accept': 'application/json',
 						'Content-Type': 'application/json'
 					},
-					body: JSON.stringify({ deck: newDeck })
+					body: JSON.stringify({ decks: newDeck })
 				})
 				if(!response.ok) {
 					const errorMessage = `${response.status} (${response.statusText})`
 					throw new Error(errorMessage)
 				}
 				const responseBody = await response.json()
-				if (responseBody.deck) {
-					shouldRedirect(true)
-				} else if (responseBody.error) {
+				if (responseBody.errors) {
+
 					setErrors(responseBody.errors)
+				} else {
+					setShouldRedirect(true)
 				}
 			} catch (error) {
 				console.error(`Error in fetch: ${error.message}`)
@@ -64,8 +65,10 @@ const NewDeckForm = (props) => {
 		}
 	}
 
+
+
   if (shouldRedirect) {
-    return <Redirect to='/users/:id'/>
+    return <Redirect to={`/users/${props.match.params.id}`} />
   }
 
   return(

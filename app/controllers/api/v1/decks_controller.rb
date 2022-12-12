@@ -1,13 +1,14 @@
+require 'pry'
 class Api::V1::DecksController < ApiController
 	before_action :authenticate_user!
 
 	def index
 		decks = Deck.all
-		render json: { decks: decks }
+		render json: decks
 
 		#user has many decks
 		#current_user.decks
-		user = current_user.decks
+		#user = current_user.decks
 	end
 
 	def show
@@ -17,13 +18,19 @@ class Api::V1::DecksController < ApiController
 	end
 
 	def create
-		#current_user = current_user.find(:id)
-		deck = current_user.decks.new(deck_params)
+		binding.pry
+		decks = current_user.decks
+		decks = Decks.new(deck_params)
+		binding.pry
 
 		if deck.save
+			#binding.pry
 			render json: { decks: deck }, serializer: DeckSerializer
+			#binding.pry
 		else
-			render json: { error: decks.errors.full_messages }, status: :unprocessable_entity
+			#binding.pry
+			render json: { error: deck.errors.full_messages }, status: :unprocessable_entity
+			#binding.pry
 		end
 	end
 
@@ -59,6 +66,6 @@ class Api::V1::DecksController < ApiController
 	end
 
 	def deck_params
-		params.require(:deck).permit(:name, :description, :user_id)
+		params.fetch(:decks, {}).require(:deck).permit(:id, :name, :description)
 	end
 end
