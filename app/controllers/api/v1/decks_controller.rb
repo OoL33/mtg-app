@@ -18,19 +18,13 @@ class Api::V1::DecksController < ApiController
 	end
 
 	def create
-		binding.pry
 		decks = current_user.decks
 		decks = Decks.new(deck_params)
-		binding.pry
 
 		if deck.save
-			#binding.pry
 			render json: { decks: deck }, serializer: DeckSerializer
-			#binding.pry
 		else
-			#binding.pry
 			render json: { error: deck.errors.full_messages }, status: :unprocessable_entity
-			#binding.pry
 		end
 	end
 
