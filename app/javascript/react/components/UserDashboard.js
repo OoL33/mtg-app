@@ -32,21 +32,24 @@ const UserDashboard = () => {
 			</Link>
 		)
 	})
-
+/*
 	const newDeckSubmitHandler = (deck) => {
 		setUserDecks([...getUserDecks, deck])
 	}
-
+*/
   return(
     <div className="grid-container">
       <h1>Welcome!</h1>
-        <div className="createNewDeck">
-          <Link to="/decks/new">Create a New Deck</Link>
-					<NewDeckForm onNewDeckSubmit={newDeckSubmitHandler} />
-					<div className="grid-container">
-						{deckTiles}
+        <div className="create-new-deck">
+          <h2><Link to="/decks/new">Create a New Deck</Link></h2>
+				</div>					
+				<div className="deck-grid-container">
+					<div className="grid-x grid-margin-y">
+						<div className="grid-container cell medium">
+							{deckTiles}
+						</div>
 					</div>
-        </div>
+				</div>
     </div>
   )
 }
