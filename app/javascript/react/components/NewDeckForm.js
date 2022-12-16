@@ -72,7 +72,7 @@ const NewDeckForm = (props) => {
   }
 
   return(
-		<div className="grid-container form-container">
+		<div className="new-deck grid-container form-container">
     <form onSubmit={postNewDeck}>
 			<ErrorList errors={errors}/>
       <label>
