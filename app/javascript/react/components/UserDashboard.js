@@ -44,7 +44,7 @@ const UserDashboard = () => {
           <h2><Link to="/decks/new">Create a New Deck</Link></h2>
 				</div>					
 				<div className="deck-grid-container">
-					<div className="grid-x grid-margin-y">
+					<div className="grid-x grid-margin-x">
 						<div className="grid-container cell medium">
 							{deckTiles}
 						</div>
