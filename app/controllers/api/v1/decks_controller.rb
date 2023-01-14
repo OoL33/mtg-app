@@ -18,11 +18,13 @@ class Api::V1::DecksController < ApiController
 	end
 
 	def create
-		decks = current_user.decks
-		decks = Decks.new(deck_params)
+		current_decks = current_user.decks
+		deck = Deck.new(name: deck_params[:name])
+		deck.description = deck_params[:description]
+		deck.user_id = current_user.id;
 
-		if deck.save
-			render json: { decks: deck }, serializer: DeckSerializer
+		if deck.save!
+			render json: { deck: deck }, each_serializer: DeckSerializer
 		else
 			render json: { error: deck.errors.full_messages }, status: :unprocessable_entity
 		end
@@ -60,6 +62,6 @@ class Api::V1::DecksController < ApiController
 	end
 
 	def deck_params
-		params.fetch(:decks, {}).require(:deck).permit(:id, :name, :description)
+		params.require(:decks).permit(:name, :description)
 	end
 end
