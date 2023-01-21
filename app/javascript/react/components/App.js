@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import UserDashboard from './UserDashboard'
 import NewDeckForm from './NewDeckForm'
@@ -6,6 +6,7 @@ import DeckShowPage from './DeckShowPage'
 import IndexPage from './IndexPage'
 
 export const App = (props) => {
+
   return (
 		<BrowserRouter>
 			<Switch>
