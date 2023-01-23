@@ -32,8 +32,6 @@ class Api::V1::DecksController < ApiController
 	
 
 	def update
-		#current_user = current_user.find(:id)
-		#deck = Deck.find_by(deck_params)
 		decks = current_user.decks
 		deck = decks.find_by(id: params[:id])
 

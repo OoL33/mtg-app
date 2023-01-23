@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons"
 
 const DeckShowPage = (props) => {
 	const [deck, setDeck] = useState({
@@ -55,38 +57,54 @@ const DeckShowPage = (props) => {
 		}
 	}
 
-	const editDeckName = () => {
+	const editDeckProperties = () => {
 		setUserEditing(!userEditing)
 	}
-	const saveDeckName = async() => {
+	const saveDeckProperties = async() => {
 		await updateDeck(deck.id, deck.name, deck.description, deck.user_id)
 		setUserEditing(false)
 	}
 
 	const handleNameChange = (event) => {
-		const {name, ...restofthedeck} = deck
-		setDeck({name: event.target.value, ...restofthedeck})
+		/*const {name, ...restofthedeck} = deck
+		setDeck({name: event.target.value, ...restofthedeck}) */
+		setDeck({
+			...deck,
+			[event.currentTarget.name]: event.currentTarget.value,
+		})
 	}
 
   return(
     <div>
       <h1>Deck Show Page</h1>
 			{!userEditing &&
-			<div> 
-				<h1>{deck.name}</h1>
-				<button onClick={editDeckName}>change name</button>
+				<div> 
+					<h1>{deck.name}</h1>
+					<p>{deck.description}</p>
+					<FontAwesomeIcon icon={faPenToSquare} /><button onClick={editDeckProperties}>Edit Deck</button>
 				</div>
 			} 
 			{userEditing &&
-			<div>
-				<input 
-					type="text"
-					onChange={(event) => {handleNameChange(event)}}
-				/>
-				<button onClick={saveDeckName}>save name</button>
-			</div>
+				<div>
+					<input 
+						name="name"
+						id="name"
+						type="text"
+						placeholder="Deck Name"
+						value={deck.name}
+						onChange={(event) => {handleNameChange(event)}}
+					/>
+					<input
+						name="description"
+						id="id" 
+						type="text"
+						placeholder="Deck Description"
+						value={deck.description}
+						onChange={(event) => {handleNameChange(event)}}
+					/>
+					<button onClick={saveDeckProperties}>Save</button>
+				</div>
 			}
-			<p>{deck.description}</p>
     </div>
   )
 }
