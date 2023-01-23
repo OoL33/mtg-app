@@ -66,14 +66,13 @@ const DeckShowPage = (props) => {
 	const handleNameChange = (event) => {
 		const {name, ...restofthedeck} = deck
 		setDeck({name: event.target.value, ...restofthedeck})
-
 	}
 
   return(
     <div>
       <h1>Deck Show Page</h1>
 			{!userEditing &&
-			<div>
+			<div> 
 				<h1>{deck.name}</h1>
 				<button onClick={editDeckName}>change name</button>
 				</div>
