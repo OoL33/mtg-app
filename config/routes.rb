@@ -21,7 +21,7 @@ Rails.application.routes.draw do
 			#end
 			get "/users/current", to: "users#current"
 			resources :users, only: [:index, :show]
-				resources :decks, only: [:index, :show, :create]
+				resources :decks, only: [:index, :show, :create, :update]
 		end
 	end
 end

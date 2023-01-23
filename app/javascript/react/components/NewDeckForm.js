@@ -1,9 +1,11 @@
 import React, { useState } from "react"
 import ErrorList from "./ErrorList"
 import _ from "lodash"
-import { Redirect } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 
 const NewDeckForm = (props) => {
+	const history = useHistory();
+
   const [shouldRedirect, setShouldRedirect] = useState(false)
   const [newDeck, setNewDeck] = useState({
     name: "",
@@ -38,7 +40,6 @@ const NewDeckForm = (props) => {
 
 		if (validForSubmission()) {
 			try {
-      	//const userId = props.match.params.id
 				const response = await fetch(`/api/v1/decks`, {
 					method: "POST",
 					credentials: "same-origin",
@@ -65,10 +66,9 @@ const NewDeckForm = (props) => {
 		}
 	}
 
-
-
   if (shouldRedirect) {
-    return <Redirect to={`/users/${props.match.params.id}`} />
+    // return <Redirect to={`/users/${props.match.params.id}`} />
+		history.go(-1);
   }
 
   return(
