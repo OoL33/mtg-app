@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import DeckTile from "./DeckTile"
-import NewDeckForm from "./NewDeckForm"
 
 const UserDashboard = (props) => {
 
@@ -58,11 +57,6 @@ const UserDashboard = (props) => {
 			</Link>
 		)
 	})
-/*
-	const newDeckSubmitHandler = (deck) => {
-		setUserDecks([...getUserDecks, deck])
-	}
-*/
 
   return(
     <div className="grid-container">
