@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons"
+import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons"
 
 const DeckShowPage = (props) => {
 	const [deck, setDeck] = useState({
@@ -74,6 +74,36 @@ const DeckShowPage = (props) => {
 		})
 	}
 
+	const [userDeletingDeck, setUserDeleteDeck] = useState(false)
+
+	const deleteDeck = async(id) => {
+		try {
+			const deckId = props.match.params.id
+			const response = await fetch(`/api/v1/decks/${deckId}`, {
+				method: "DELETE",
+				credentials: "same-origin",
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+			})
+			if(!response.ok) {
+				const errorMessage = `${response.status} (${response.statusText})`
+				throw new Error(errorMessage)
+			}
+			//const responseBody = await response.json()
+			navigate('/users/:id')
+			//const selectedDeck = responseBody.deck
+			//setUserDecks(selectedDeck)
+		} catch (error) {
+			console.error(`Error in fetch: ${error.message}`)
+		}
+	}
+
+	const selectDeckToDelete = () => {
+		setUserDeleteDeck(userDeletingDeck)
+	}
+
   return(
     <div>
       <h1>Deck Show Page</h1>
@@ -103,6 +133,11 @@ const DeckShowPage = (props) => {
 						onChange={(event) => {handleNameChange(event)}}
 					/>
 					<button onClick={saveDeckProperties}>Save</button>
+					{userDeletingDeck &&
+						<div>
+							<FontAwesomeIcon icon={faTrash} /><button onClick={selectDeckToDelete}>Delete Deck</button>
+						</div>
+					}
 				</div>
 			}
     </div>

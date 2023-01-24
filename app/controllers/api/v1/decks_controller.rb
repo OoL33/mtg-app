@@ -5,10 +5,6 @@ class Api::V1::DecksController < ApiController
 	def index
 		decks = Deck.all
 		render json: decks
-
-		#user has many decks
-		#current_user.decks
-		#user = current_user.decks
 	end
 
 	def show
@@ -42,9 +38,8 @@ class Api::V1::DecksController < ApiController
 		end
 	end
 
-=begin
 	def destroy
-		#current_user = current_user.find(:id)
+		decks = current_user.decks
 		deck = Deck.find_by(params[:id])
 
 		if deck.destroy
@@ -53,7 +48,6 @@ class Api::V1::DecksController < ApiController
 			render json: { error: deck.errors.full_messages }, status: :unprocessable_entity
 		end
 	end
-=end
 
 	private
 
