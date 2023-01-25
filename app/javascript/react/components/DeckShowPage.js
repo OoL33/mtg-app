@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react"
+import { useHistory } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons"
+import { faPenToSquare, faCircleCheck, faTrash } from "@fortawesome/free-solid-svg-icons"
 
 const DeckShowPage = (props) => {
+	const history = useHistory()
+
 	const [deck, setDeck] = useState({
 		id: undefined,
 		name: "",
@@ -66,15 +69,11 @@ const DeckShowPage = (props) => {
 	}
 
 	const handleNameChange = (event) => {
-		/*const {name, ...restofthedeck} = deck
-		setDeck({name: event.target.value, ...restofthedeck}) */
 		setDeck({
 			...deck,
 			[event.currentTarget.name]: event.currentTarget.value,
 		})
 	}
-
-	const [userDeletingDeck, setUserDeleteDeck] = useState(false)
 
 	const deleteDeck = async(id) => {
 		try {
@@ -91,17 +90,15 @@ const DeckShowPage = (props) => {
 				const errorMessage = `${response.status} (${response.statusText})`
 				throw new Error(errorMessage)
 			}
-			//const responseBody = await response.json()
-			navigate('/users/:id')
-			//const selectedDeck = responseBody.deck
-			//setUserDecks(selectedDeck)
 		} catch (error) {
 			console.error(`Error in fetch: ${error.message}`)
 		}
 	}
 
-	const selectDeckToDelete = () => {
-		setUserDeleteDeck(userDeletingDeck)
+	const deleteDeckProperties = async() => {
+		await deleteDeck(id)
+		setUserEditing(false)
+		history.go(-3)
 	}
 
   return(
@@ -132,12 +129,10 @@ const DeckShowPage = (props) => {
 						value={deck.description}
 						onChange={(event) => {handleNameChange(event)}}
 					/>
-					<button onClick={saveDeckProperties}>Save</button>
-					{userDeletingDeck &&
-						<div>
-							<FontAwesomeIcon icon={faTrash} /><button onClick={selectDeckToDelete}>Delete Deck</button>
-						</div>
-					}
+					<div className="small button-group">
+						<a className="button" onClick={saveDeckProperties}><FontAwesomeIcon icon={faCircleCheck} /> Save</a>
+						<a className="button" onClick={deleteDeckProperties}><FontAwesomeIcon icon={faTrash} /> Delete Deck</a>
+					</div>
 				</div>
 			}
     </div>
