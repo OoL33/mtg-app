@@ -59,36 +59,6 @@ const UserDashboard = (props) => {
 		)
 	})
 
-	const deleteDeck = async(id, name, description, user_id) => {
-		const newObject = {id: id, name: name, description: description, user_id: user_id}
-		try {
-			const deckId = props.match.params.id
-			const response = await fetch(`/api/v1/decks/${deckId}`, {
-				method: "DELETE",
-				credentials: "same-origin",
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ decks: newObject })
-			})
-			if(!response.ok) {
-				const errorMessage = `${response.status} (${response.statusText})`
-				throw new Error(errorMessage)
-			}
-			const responseBody = await response.json()
-			const selectedDeck = responseBody.deck
-			setUserDecks(selectedDeck)
-		} catch (error) {
-			console.error(`Error in fetch: ${error.message}`)
-		}
-	}
-
-	const saveDeletedDecks = async() => {
-		await deleteDeck(deck.id, deck.name, deck.description, deck.user_id)
-		setUserDeleteDecks(false)
-	}
-
   return(
     <div className="grid-container">
 		{renderError && 

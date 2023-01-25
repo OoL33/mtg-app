@@ -40,10 +40,10 @@ class Api::V1::DecksController < ApiController
 
 	def destroy
 		decks = current_user.decks
-		deck = Deck.find_by(params[:id])
+		deck = decks.find_by(id: params[:id])
 
 		if deck.destroy
-			head :no_content
+			render json: {}
 		else
 			render json: { error: deck.errors.full_messages }, status: :unprocessable_entity
 		end

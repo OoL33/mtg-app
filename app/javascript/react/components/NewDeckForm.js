@@ -4,7 +4,7 @@ import _ from "lodash"
 import { useHistory } from "react-router-dom"
 
 const NewDeckForm = (props) => {
-	const history = useHistory();
+	const history = useHistory()
 
   const [shouldRedirect, setShouldRedirect] = useState(false)
   const [newDeck, setNewDeck] = useState({
