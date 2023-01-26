@@ -67,12 +67,11 @@ const NewDeckForm = (props) => {
 	}
 
   if (shouldRedirect) {
-    // return <Redirect to={`/users/${props.match.params.id}`} />
 		history.go(-1);
   }
 
   return(
-		<div className="new-deck grid-container form-container">
+		<div className="callout new-deck grid-container form-container">
     <form onSubmit={postNewDeck}>
 			<ErrorList errors={errors}/>
       <label>

@@ -1,4 +1,3 @@
-require 'pry'
 class Api::V1::DecksController < ApiController
 	before_action :authenticate_user!
 
