@@ -5,5 +5,6 @@ class HomesController < ApplicationController
   end
 
 	def authenticated
+		current_user = current_user
 	end
 end
