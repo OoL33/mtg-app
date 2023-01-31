@@ -41,7 +41,6 @@ const SearchBar = (props) => {
 	}
 
 	const cardsTiles = searchCards.map((card) => {
-		debugger
 		return(
 			<div>
 				<ul>

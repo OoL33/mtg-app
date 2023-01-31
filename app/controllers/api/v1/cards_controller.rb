@@ -1,8 +1,6 @@
-require 'pry'
 class Api::V1::CardsController < ApiController
 	def index
 		cards = Card.all
-		binding.pry
 		render json: cards
 	end
 
