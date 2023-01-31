@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useHistory } from "react-router-dom"
+import SearchBar from "./SearchBar"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, faCircleCheck, faTrash } from "@fortawesome/free-solid-svg-icons"
 

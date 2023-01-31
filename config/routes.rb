@@ -5,12 +5,15 @@ Rails.application.routes.draw do
 	get '/users/:id', to: 'homes#authenticated'
 	get 'decks/new', to: 'homes#authenticated'
 	get '/decks/:id', to: 'homes#authenticated'
+	get 'cards/search', to: 'homes#authenticated'
 
 	namespace :api do
 		namespace :v1 do
-			get "/users/current", to: "users#current"
+			get '/users/current', to: 'users#current'
 			resources :users, only: [:index, :show]
 				resources :decks, only: [:index, :show, :create, :update, :destroy]
+				resources :cards, only: [:index, :show]
+			post 'cards/search', to: 'cards#search'
 		end
 	end
 end
