@@ -2,7 +2,7 @@ class Api::V1::UsersController < ApiController
 	before_action :authenticate_user!
 
 	def index
-		users = User.all
+		current_user = User.find(params[:id])
 		render json: { users: users }
 	end
 
