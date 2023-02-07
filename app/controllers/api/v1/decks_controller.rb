@@ -57,6 +57,6 @@ class Api::V1::DecksController < ApiController
 	end
 
 	def deck_params
-		params.require(:decks).permit(:id, :name, :colors, :image_urls, :external_ids)
+		params.require(:decks).permit(:id, :name, :description, :user_id)
 	end
 end

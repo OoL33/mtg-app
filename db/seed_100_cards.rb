@@ -24,8 +24,10 @@ for k in 0..cards.length-1 do
 		external_ids.push(cards[k]['id'])
 	end
 end
-
+=end
 # -----------------------------------------  SEED DATABASE ----------------------------
+
+
 
 # for k in 0..repo_list_items.length-1 do
 # 	crawler = GitHubCrawler.find_or_initialize_by(name: name_array[k])

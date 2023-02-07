@@ -1,9 +1,10 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import CardTile from "./CardTile"
 
 const SearchBar = (props) => {
 	const [searchCards, setSearchCards] = useState([])
 	const [searchString, setSearchString] = useState('')
+	const [cardTiles, setCardTiles] = useState(<div></div>)
 
 	const handleChange = (event) => {
 		const newSearchString = event.target.value
@@ -21,7 +22,7 @@ const SearchBar = (props) => {
 				credentials: "same-origin",
 				body: body,
 				headers: {
-					"Content-Type": "application.json",
+					"Content-Type": "application/json",
 					"Accept": "application/json"
 				}
 			})
@@ -30,25 +31,26 @@ const SearchBar = (props) => {
 				throw new Error(errorMessage)
 			}
 			const responseBody = await response.json()
-			setSearchCards([
-				...searchCards,
-				responseBody
-			])
-			
+			setSearchCards(responseBody.cards)
 		} catch (error) {
 			console.error(`Error in Fetch: ${error.message}`)
 		}
 	}
 
-	const cardsTiles = searchCards.map((card) => {
-		return(
-			<div>
-				<ul>
-					<CardTile key={card.uniqueId} card={card} />
-				</ul>
-			</div>
-		)
-	})
+	useEffect( () => {
+		setCardTiles(getCardTiles())
+	}, [searchCards])
+
+
+	const getCardTiles = () => {
+		return searchCards.map((card) => {
+			return(
+				<div key={card.id}>
+					<CardTile card={card} key={card.id} />
+				</div>
+			)
+		})
+	}
 
 	return(
 		<div>
@@ -60,7 +62,7 @@ const SearchBar = (props) => {
 			<div className="deck-grid-container">
 				<div className="grid-x grid-margin-x">
 					<div className="grid-container cell medium">
-						{cardsTiles}
+						{cardTiles}
 					</div>
 				</div>
 			</div>
