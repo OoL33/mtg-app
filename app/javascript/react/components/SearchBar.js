@@ -4,11 +4,19 @@ import CardTile from "./CardTile"
 const SearchBar = (props) => {
 	const [searchCards, setSearchCards] = useState([])
 	const [searchString, setSearchString] = useState('')
-	const [cardTiles, setCardTiles] = useState(<div></div>)
+	const [cardTiles, setCardTiles] = useState(null)
 
 	const handleChange = (event) => {
 		const newSearchString = event.target.value
 		setSearchString(newSearchString)
+	}
+
+	const dedupedData = (data) => {
+		return data.filter((item, index, self) => 
+  		index === self.findIndex((t) => (
+    	t.name === item.name
+  		))
+		)
 	}
 
 	const handleSubmit = async(event) => {
@@ -31,12 +39,13 @@ const SearchBar = (props) => {
 				throw new Error(errorMessage)
 			}
 			const responseBody = await response.json()
-			setSearchCards(responseBody.cards)
+			const dedupedArray = dedupedData(responseBody.cards)
+			setSearchCards(dedupedArray)
 		} catch (error) {
 			console.error(`Error in Fetch: ${error.message}`)
 		}
 	}
-
+4
 	useEffect( () => {
 		setCardTiles(getCardTiles())
 	}, [searchCards])
