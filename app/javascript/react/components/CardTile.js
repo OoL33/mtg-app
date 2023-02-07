@@ -6,7 +6,8 @@ const CardTile = (props) => {
 		<div className="grid-x grid-margin-x" data-equalizer data-equalize-on="medium" id="test-eq">
 			<div className="cell medium-4">
 				<div className="callout" data-equalizer-watch>
-				{props.cards.name}
+				{props.card.name}
+				<img src={props.card.image_urls} />
 				</div>
 			</div>
 		</div>
