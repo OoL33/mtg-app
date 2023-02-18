@@ -2,8 +2,7 @@ class Api::V1::DecksController < ApiController
 	before_action :authenticate_user!
 
 	def index
-		decks = Deck.all
-		render json: decks
+		render json: current_user.decks
 	end
 
 	def show
@@ -24,7 +23,6 @@ class Api::V1::DecksController < ApiController
 			render json: { error: deck.errors.full_messages }, status: :unprocessable_entity
 		end
 	end
-	
 
 	def update
 		decks = current_user.decks
