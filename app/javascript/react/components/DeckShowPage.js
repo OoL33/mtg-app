@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react"
 import { useHistory } from "react-router-dom"
-import SearchBar from "./SearchBar"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, faCircleCheck, faTrash } from "@fortawesome/free-solid-svg-icons"
+import SearchBar from "./SearchBar"
 
 const DeckShowPage = (props) => {
 	const history = useHistory()
@@ -76,7 +76,7 @@ const DeckShowPage = (props) => {
 		})
 	}
 
-	const deleteDeck = async(id) => {
+	const deleteDeck = async() => {
 		try {
 			const deckId = props.match.params.id
 			const response = await fetch(`/api/v1/decks/${deckId}`, {
@@ -97,9 +97,9 @@ const DeckShowPage = (props) => {
 	}
 
 	const deleteDeckProperties = async() => {
-		await deleteDeck(id)
+		await deleteDeck()
 		setUserEditing(false)
-		history.go(-3)
+		history.go(-4)
 	}
 
   return(
@@ -109,6 +109,9 @@ const DeckShowPage = (props) => {
 					<h1>{deck.name}</h1>
 					<p>{deck.description}</p>
 					<FontAwesomeIcon icon={faPenToSquare} /><button onClick={editDeckProperties}>Edit Deck</button>
+					<SearchBar
+						currentDeckId={props.match.params.id}
+					/>
 				</div>
 			} 
 			{userEditing &&

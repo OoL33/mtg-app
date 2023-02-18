@@ -70,7 +70,6 @@ const UserDashboard = (props) => {
 				<h1>Welcome!</h1>
 				<div className="create-new-deck">
 					<h2><Link to="/decks/new">Create a New Deck</Link></h2>
-					<h2><Link to="/cards/search">Look for a Card</Link></h2>
 				</div>					
 				<div className="deck-grid-container">
 					<div className="grid-x grid-margin-x">

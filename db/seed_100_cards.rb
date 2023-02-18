@@ -24,7 +24,7 @@ for k in 0..cards.length-1 do
 		external_ids.push(cards[k]['id'])
 	end
 end
-=end
+
 # -----------------------------------------  SEED DATABASE ----------------------------
 
 

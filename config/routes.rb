@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 	get '/users/:id', to: 'homes#authenticated'
 	get 'decks/new', to: 'homes#authenticated'
-	get '/decks/:id', to: 'homes#authenticated'
+	get 'decks/:id', to: 'homes#authenticated'
 	get 'cards/search', to: 'homes#authenticated'
 
 	namespace :api do
@@ -13,7 +13,7 @@ Rails.application.routes.draw do
 			post 'cards/search', to: 'cards#search'
 			resources :users, only: [:index, :show]
 				resources :decks, only: [:index, :show, :create, :update, :destroy]
-				resources :cards, only: [:index, :show, :search]
+				resources :cards, only: [:index, :show, :search, :create, :update]
 		end
 	end
 end
