@@ -1,6 +1,6 @@
 import React from "react"
 
-const CardTile = (props) => {
+const SearchCardTile = (props) => {
 	return(
 	<div>
 		<div className="grid-x grid-margin-x" data-equalizer data-equalize-on="medium" id="test-eq">
@@ -15,4 +15,4 @@ const CardTile = (props) => {
 	)
 }
 
-export default CardTile
+export default SearchCardTile

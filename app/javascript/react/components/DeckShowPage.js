@@ -2,17 +2,12 @@ import React, { useState, useEffect } from "react"
 import { useHistory } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, faCircleCheck, faTrash } from "@fortawesome/free-solid-svg-icons"
-import SearchBar from "./SearchBar"
+import Cards from "./Cards"
 
 const DeckShowPage = (props) => {
 	const history = useHistory()
 
-	const [deck, setDeck] = useState({
-		id: undefined,
-		name: "",
-		description: "",
-		user_id: undefined 
-	})
+	const [deck, setDeck] = useState({})
 
 	const fetchDeck = async() => {
 		try {
@@ -23,8 +18,11 @@ const DeckShowPage = (props) => {
         throw new Error(errorMessage)
       }
       const responseBody = await response.json()
-			const singleDeckData = responseBody.deck
-      setDeck(singleDeckData) 
+			console.log("fetchDeck responseBody:")
+			console.log(responseBody)
+			const singleDeckData = responseBody
+			console.log(singleDeckData)
+      setDeck(singleDeckData)
     } catch (error) {
       console.error(`Error in fetch: ${error.message}`)
     }
@@ -36,8 +34,7 @@ const DeckShowPage = (props) => {
 
 	const [userEditing, setUserEditing] = useState(false)
 
-	const updateDeck = async(id, name, description, user_id) => {
-		const newObject = {id: id, name: name, description: description, user_id: user_id}
+	const updateDeck = async() => {
 		try {
 			const deckId = props.match.params.id
 			const response = await fetch(`/api/v1/decks/${deckId}`, {
@@ -47,7 +44,7 @@ const DeckShowPage = (props) => {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ decks: newObject })
+				body: JSON.stringify({ decks: deck })
 			})
 			if(!response.ok) {
 				const errorMessage = `${response.status} (${response.statusText})`
@@ -108,10 +105,11 @@ const DeckShowPage = (props) => {
 				<div> 
 					<h1>{deck.name}</h1>
 					<p>{deck.description}</p>
-					<FontAwesomeIcon icon={faPenToSquare} /><button onClick={editDeckProperties}>Edit Deck</button>
-					<SearchBar
+					<FontAwesomeIcon icon={faPenToSquare} /><button onClick={editDeckProperties}> Edit Deck</button>
+					<Cards
+						currentDeck={deck}
 						currentDeckId={props.match.params.id}
-					/>
+					/>					
 				</div>
 			} 
 			{userEditing &&

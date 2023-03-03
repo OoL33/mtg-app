@@ -12,8 +12,9 @@ Rails.application.routes.draw do
 			get '/users/current', to: 'users#current'
 			post 'cards/search', to: 'cards#search'
 			resources :users, only: [:index, :show]
-				resources :decks, only: [:index, :show, :create, :update, :destroy]
-				resources :cards, only: [:index, :show, :search, :create, :update]
+				resources :decks, only: [:index, :show, :create, :update, :destroy] do
+					resources :cards, only: [:index, :show, :search, :create]
+				end
 		end
 	end
 end

@@ -1,10 +1,10 @@
 import React from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import IndexPage from './IndexPage'
 import UserDashboard from './UserDashboard'
 import NewDeckForm from './NewDeckForm'
 import DeckShowPage from './DeckShowPage'
-import IndexPage from './IndexPage'
-import SearchBar from './SearchBar'
+import Cards from './Cards'
 
 export const App = (props) => {
 
@@ -15,7 +15,7 @@ export const App = (props) => {
 				<Route exact path="/users/:id" component={UserDashboard} />
 				<Route exact path="/decks/new" component={NewDeckForm}/>
 				<Route exact path="/decks/:id" component={DeckShowPage} />
-				<Route exact path="/cards/search" component={SearchBar} />
+				<Route exact path="/cards/search" component={Cards} />
 			</Switch>
 		</BrowserRouter>
 	)
