@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import SearchBar from "./SearchBar"
 import DeckTile from "./DeckTile"
 
 const UserDashboard = (props) => {
@@ -25,7 +23,6 @@ const UserDashboard = (props) => {
 			const responseBody = await response.json()
 			const currentDecks = responseBody.user.decks
 			setCurrentUserIdFromServer(responseBody.user.id)
-			
 			setUserDecks(currentDecks)
 		} catch (error) {
 			console.error(`Error in Fetch: ${error.message}`)

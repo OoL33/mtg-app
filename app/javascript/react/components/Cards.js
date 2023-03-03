@@ -1,12 +1,34 @@
 import React, { useState, useEffect } from "react"
-import CardTile from "./CardTile"
+import CardsInDeckTile from "./CardsInDeckTile"
+import SearchCardTile from "./SearchCardTile"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons"
 
-const SearchBar = (props) => {
+const Cards = (props) => {
+	const [getCardsInDeck, setCardsInDeck] = useState([])
 	const [searchCards, setSearchCards] = useState([])
 	const [searchString, setSearchString] = useState('')
-	const [cardTiles, setCardTiles] = useState(null)
+	const [searchCardTiles, setSearchCardTiles] = useState(null)
+
+	const checkCardsInDeck = async() => {
+		try {
+			const response = await fetch(`/api/v1/decks/${props.currentDeckId}/cards`)
+			if(!response.ok) {
+        const errorMessage = `${response.status} (${response.statusText})`
+        throw new Error(errorMessage)
+      }
+      const responseBody = await response.json()
+			console.log("checkCardsInDeck responseBody:")
+			console.log(responseBody.cards)
+			setCardsInDeck(responseBody.cards)
+		} catch (error) {
+			console.error(`Error in fetch: ${error.message}`)
+		}
+	}
+
+	useEffect(() => {
+		checkCardsInDeck()
+	}, [])
 
 	const handleChange = (event) => {
 		const newSearchString = event.target.value
@@ -50,16 +72,14 @@ const SearchBar = (props) => {
 	}
 
 	useEffect(() => {
-		setCardTiles(getCardTiles())
+		setSearchCardTiles(getSearchCardTiles())
 	}, [searchCards])
 
-	const [clickedCardTile, setClickedCardTile] = useState(null)
-
-	const getCardTiles = () => {
+	const getSearchCardTiles = () => {
 		return searchCards.map((card) => {
 			return(
 				<div key={card.id}>
-					<CardTile card={card} key={card.id} />
+					<SearchCardTile card={card} key={card.id} />
 				</div>
 			)
 		})
@@ -86,7 +106,10 @@ const SearchBar = (props) => {
 
 	return(
 		<div>
-			<a className="button" onClick={addCardToDeck}><FontAwesomeIcon icon={faCircleCheck} />Add Card to Deck</a>
+			<CardsInDeckTile
+				getCardsInDeck={getCardsInDeck}
+			/>
+			<a className="button" onClick={addCardToDeck}><FontAwesomeIcon icon={faCircleCheck} /> Add Card to Deck</a>
 			<form onSubmit={handleSubmit}>
 				<label>Search for a Card</label>
 				<input type='text' name='searchString' value={searchString} onChange={handleChange} />
@@ -95,7 +118,7 @@ const SearchBar = (props) => {
 			<div className="deck-grid-container">
 				<div className="grid-x grid-margin-x">
 					<div className="grid-container cell medium">
-						{cardTiles}
+						{searchCardTiles}
 					</div>
 				</div>
 			</div>
@@ -103,4 +126,4 @@ const SearchBar = (props) => {
 	)
 }
 
-export default SearchBar
+export default Cards
