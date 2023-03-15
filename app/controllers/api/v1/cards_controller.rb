@@ -1,83 +1,56 @@
+require 'pry'
 class Api::V1::CardsController < ApiController
 	before_action :authenticate_user!
+
+	CLIENT = Faraday.new('https://api.magicthegathering.io/v1/cards')
 
 	def index
 		if params[:deck_id]
 			deck = Deck.find(params[:deck_id])
-			cards = deck.cards
+			cards = deck.cards.page(params[:page])
 		else
-			cards = Card.all
+			cards = Card.all.page(params[:page])
 		end
 		render json: cards
 	end
 
 	def search
+		binding.pry
 		search_string = params[:search_string]
 
-		client = Faraday.new('https://api.magicthegathering.io/v1/cards')
-		
-		cards = []
-		page = 1
-		per_page = 100
-		response = client.get do |req|
-			req.params['page'] = page
-			req.params['per_page'] = per_page
+		response = CLIENT.get do |req|
 			req.params['name'] = search_string if search_string.present?
 			req.params['colors'] = search_string if search_string.present?
 			req.params['multiverseid'] = 'is:numeric'
 		end
-		json_response = JSON.parse(response.body)
-		cards = json_response['cards'].select { |card| card['multiverseid'].present? }
-
-		cards = cards.map do |card|
-			{
-				name: card['name'],
-				colors: card['colors'],
-				image_url: card['imageUrl'],
-				external_ids: card['multiverseid']
-			}
-		end
-
-		max_cards = 5
-		cards_retrieved = 0
-
-		while cards.length == per_page && cards_retrieved < max_cards
-			page += 1
-			response = client.get do |req|
-				req.params['page'] = page
-				req.params['per_page'] = per_page
-			end
-
+	
+		if response.success?
 			json_response = JSON.parse(response.body)
-			
-			new_cards = json_response['cards'].select { |card| card['multiverseid'].present? }
-
-			cards += new_cards.map do |card|
-				{
-					name: card['name'],
-					colors: card['colors'],
-					image_url: card['imageUrl'],
-					external_ids: card['multiverseid']
-				}
-			end
-			cards_retrieved = cards.length
-		end
-
-		render json: cards, each_serializer: CardSerializer
-	end
-
-	def create
-		deck = Deck.find_by(id: params[:deck_id])
-		card = Card.find_or_create_by(card_params)
-
-		associated_cards = deck.cards.select { |obj| obj.id == card.id }
-
-		if(associated_cards.length > 0)
-			puts "\n\n card under id : #{card.id} is already associated with deck under id : #{deck.id} \n\n"
+			cards = json_response['cards'].filter { |card| card['multiverseid'].present? }
+	
+			# limit cards to 5
+			cards = cards[0..4]
+	
+			render json: cards.map { |card| build_card(card) }, each_serializer: CardSerializer, root: 'cards'
 		else
-			deck.cards << card
+			render json: { error: response.status }, status: response.status
 		end
-	end
+	# rescue Faraday::ConnectionFailed => e
+	# 	render json: { error: e.message }, status: :internal_server_error
+	end	
+
+	# def create
+	# 	deck = Deck.find_by(id: params[:deck_id])
+	# 	card = Card.find_or_create_by(card_params)
+
+	# 	associated_cards = deck.cards.select { |obj| obj.id == card.id }
+
+	# 	if(associated_cards.length > 0)
+	# 		puts "\n\n card under id : #{card.id} is already associated with deck under id : #{deck.id} \n\n"
+	# 	else
+	# 		deck.cards << card
+	# 	end
+	# end
 
 	def show
 		deck = Deck.find(id: params[:deck_id])
@@ -87,7 +60,20 @@ class Api::V1::CardsController < ApiController
 
 	private
 
+	def build_card(card)
+    {
+      name: card['name'],
+      colors: card['colors'],
+      image_url: card['imageUrl'],
+      external_ids: card['multiverseid'].split(',').map(&:to_i)
+    }
+  end
+
 	def card_params
-		params.require(:card).permit(:id, :name, :colors, :image_urls, :external_ids)
+		if params[:card].present?
+			params.require(:card).permit(:id, :name, :colors, :image_urls, :external_ids)
+		else
+			{}
+		end
 	end
 end
