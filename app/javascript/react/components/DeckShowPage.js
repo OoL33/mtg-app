@@ -11,6 +11,7 @@ const DeckShowPage = (props) => {
 
 	const fetchDeck = async() => {
 		try {
+			
 			const deckId = props.match.params.id
       const response = await fetch(`/api/v1/decks/${deckId}`)
       if(!response.ok) {
@@ -18,6 +19,7 @@ const DeckShowPage = (props) => {
         throw new Error(errorMessage)
       }
       const responseBody = await response.json()
+			console.log(deckId)
 			console.log("fetchDeck responseBody:")
 			console.log(responseBody)
 			const singleDeckData = responseBody
