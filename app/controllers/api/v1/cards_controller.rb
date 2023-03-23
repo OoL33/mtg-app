@@ -1,17 +1,21 @@
+
 class Api::V1::CardsController < ApiController
 	before_action :authenticate_user!
+
+	CLIENT = Faraday.new('https://api.magicthegathering.io/v1/cards')
 
 	def index
 		if params[:deck_id]
 			deck = Deck.find(params[:deck_id])
-			cards = deck.cards
+			cards = deck.cards.page(params[:page])
 		else
-			cards = Card.all
+			cards = Card.all.page(params[:page])
 		end
 		render json: cards
 	end
 
 	def search
+		binding.pry
 		search_string = params[:search_string]
 
 		client = Faraday.new('https://api.scryfall.com/cards/search')
@@ -47,9 +51,22 @@ class Api::V1::CardsController < ApiController
 		if(associated_cards.length > 0)
 			puts "\n\n card under id : #{card.id} is already associated with deck under id : #{deck.id} \n\n"
 		else
-			deck.cards << card
+			render json: { error: response.status }, status: response.status
 		end
-	end
+	end	
+
+	# def create
+	# 	deck = Deck.find_by(id: params[:deck_id])
+	# 	card = Card.find_or_create_by(card_params)
+
+	# 	associated_cards = deck.cards.select { |obj| obj.id == card.id }
+
+	# 	if(associated_cards.length > 0)
+	# 		puts "\n\n card under id : #{card.id} is already associated with deck under id : #{deck.id} \n\n"
+	# 	else
+	# 		deck.cards << card
+	# 	end
+	# end
 
 	def show
 		deck = Deck.find(id: params[:deck_id])
@@ -58,6 +75,15 @@ class Api::V1::CardsController < ApiController
 	end
 
 	private
+
+	def build_card(card)
+    {
+      name: card['name'],
+      colors: card['colors'],
+      image_url: card['imageUrl'],
+      external_ids: card['multiverseid'].split(',').map(&:to_i)
+    }
+  end
 
 	def card_params
 		params.require(:card).permit(:id, :name, :colors, :image_urls, :external_ids)

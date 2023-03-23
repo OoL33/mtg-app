@@ -35,7 +35,8 @@ const Cards = (props) => {
 		setSearchString(newSearchString)
 	}
 
-	const dedupedData = (data) => {
+	const dedupedCards = (data) => {
+		console.log(data)
 		return data.filter((item, index, self) => 
 			index === self.findIndex((t) => (
 				t.name === item.name
@@ -48,6 +49,7 @@ const Cards = (props) => {
 		const body = JSON.stringify({
 			search_string: searchString
 		})
+		console.log('search FETCH body:', body)
 		try {
 			const response = await fetch('/api/v1/cards/search', {
 				method: "POST",
@@ -73,8 +75,8 @@ const Cards = (props) => {
 	}
 
 	useEffect(() => {
-		setSearchCardTiles(getSearchCardTiles())
-	}, [searchCards])
+		setSearchCardTiles(getSearchCardTiles)
+	}, [searchCardTiles])
 
 	const getSearchCardTiles = () => {
 		return searchCards.map((card) => {
@@ -88,8 +90,6 @@ const Cards = (props) => {
 
 	const addCardToDeck = async() => {
 		try {
-			console.log('I want  a milkshake')
-			console.log(cardTiles[0].key)
 			const response = await fetch(`/api/v1/cards`, {
 				method: "POST",
 				credentials: "same-origin",
@@ -99,7 +99,7 @@ const Cards = (props) => {
 				},
 				body: JSON.stringify({ id: searchCardTiles[0].key, deck_id: props.currentDeckId })
 			})
-			console.log(response)
+			console.log('addCardToDeck FETCH response:' ,response)
 		} catch (error) {
 			console.error(`Error in fetch: ${error.message}`)
 		}
