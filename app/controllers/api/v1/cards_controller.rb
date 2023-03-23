@@ -1,4 +1,4 @@
-require 'pry'
+
 class Api::V1::CardsController < ApiController
 	before_action :authenticate_user!
 
@@ -18,25 +18,41 @@ class Api::V1::CardsController < ApiController
 		binding.pry
 		search_string = params[:search_string]
 
-		response = CLIENT.get do |req|
-			req.params['name'] = search_string if search_string.present?
-			req.params['colors'] = search_string if search_string.present?
-			req.params['multiverseid'] = 'is:numeric'
+		client = Faraday.new('https://api.scryfall.com/cards/search')
+
+		response = client.get do |req|
+			req.params['q'] = search_string if search_string.present?
 		end
-	
-		if response.success?
-			json_response = JSON.parse(response.body)
-			cards = json_response['cards'].filter { |card| card['multiverseid'].present? }
-	
-			# limit cards to 5
-			cards = cards[0..4]
-	
-			render json: cards.map { |card| build_card(card) }, each_serializer: CardSerializer, root: 'cards'
+		json_response = JSON.parse(response.body)
+
+		cards = json_response['data'].map do |card|
+			Card.find_or_create_by(external_ids: card['multiverse_ids']) do |c|
+				c.name = card['name']
+				c.colors = card['colors']
+				c.image_urls = card['image_uris']['normal']
+			end
+		end
+
+		filtered_cards = filter_cards(cards, params)
+
+		max_cards = 5
+
+		cards = cards.first(max_cards)
+
+		render json: cards.as_json
+	end
+
+	def create
+		deck = Deck.find_by(id: params[:deck_id])
+		card = Card.find_or_create_by(card_params)
+
+		associated_cards = deck.cards.select { |obj| obj.id == card.id }
+
+		if(associated_cards.length > 0)
+			puts "\n\n card under id : #{card.id} is already associated with deck under id : #{deck.id} \n\n"
 		else
 			render json: { error: response.status }, status: response.status
 		end
-	# rescue Faraday::ConnectionFailed => e
-	# 	render json: { error: e.message }, status: :internal_server_error
 	end	
 
 	# def create
@@ -70,10 +86,12 @@ class Api::V1::CardsController < ApiController
   end
 
 	def card_params
-		if params[:card].present?
-			params.require(:card).permit(:id, :name, :colors, :image_urls, :external_ids)
-		else
-			{}
-		end
+		params.require(:card).permit(:id, :name, :colors, :image_urls, :external_ids)
+	end
+
+	def filter_cards(cards, params)
+		cards = cards.filter { |card| card.name.include?(params[:name]) } if params[:name].present?
+		cards = cards.filter { |card| card.colors.include?(params[:color]) } if params[:color].present?
+		cards
 	end
 end
