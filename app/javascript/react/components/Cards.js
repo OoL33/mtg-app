@@ -63,8 +63,9 @@ const Cards = (props) => {
 				throw new Error(errorMessage)
 			}
 			const responseBody = await response.json()
-			console.log(responseBody.cards)
-			const dedupedArray = dedupedData(responseBody.cards)
+			console.log("handleSubmit responseBody:")
+			console.log(responseBody)
+			const dedupedArray = dedupedData(responseBody)
 			setSearchCards(dedupedArray)
 		} catch (error) {
 			console.error(`Error in Fetch: ${error.message}`)
@@ -96,7 +97,7 @@ const Cards = (props) => {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ id: cardTiles[0].key, deck_id: props.currentDeckId })
+				body: JSON.stringify({ id: searchCardTiles[0].key, deck_id: props.currentDeckId })
 			})
 			console.log(response)
 		} catch (error) {

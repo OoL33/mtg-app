@@ -14,56 +14,28 @@ class Api::V1::CardsController < ApiController
 	def search
 		search_string = params[:search_string]
 
-		client = Faraday.new('https://api.magicthegathering.io/v1/cards')
-		
-		cards = []
-		page = 1
-		per_page = 100
+		client = Faraday.new('https://api.scryfall.com/cards/search')
+
 		response = client.get do |req|
-			req.params['page'] = page
-			req.params['per_page'] = per_page
-			req.params['name'] = search_string if search_string.present?
-			req.params['colors'] = search_string if search_string.present?
-			req.params['multiverseid'] = 'is:numeric'
+			req.params['q'] = search_string if search_string.present?
 		end
 		json_response = JSON.parse(response.body)
-		cards = json_response['cards'].select { |card| card['multiverseid'].present? }
 
-		cards = cards.map do |card|
-			{
-				name: card['name'],
-				colors: card['colors'],
-				image_url: card['imageUrl'],
-				external_ids: card['multiverseid']
-			}
+		cards = json_response['data'].map do |card|
+			Card.find_or_create_by(external_ids: card['multiverse_ids']) do |c|
+				c.name = card['name']
+				c.colors = card['colors']
+				c.image_urls = card['image_uris']['normal']
+			end
 		end
+
+		filtered_cards = filter_cards(cards, params)
 
 		max_cards = 5
-		cards_retrieved = 0
 
-		while cards.length == per_page && cards_retrieved < max_cards
-			page += 1
-			response = client.get do |req|
-				req.params['page'] = page
-				req.params['per_page'] = per_page
-			end
+		cards = cards.first(max_cards)
 
-			json_response = JSON.parse(response.body)
-			
-			new_cards = json_response['cards'].select { |card| card['multiverseid'].present? }
-
-			cards += new_cards.map do |card|
-				{
-					name: card['name'],
-					colors: card['colors'],
-					image_url: card['imageUrl'],
-					external_ids: card['multiverseid']
-				}
-			end
-			cards_retrieved = cards.length
-		end
-
-		render json: cards, each_serializer: CardSerializer
+		render json: cards.as_json
 	end
 
 	def create
@@ -89,5 +61,11 @@ class Api::V1::CardsController < ApiController
 
 	def card_params
 		params.require(:card).permit(:id, :name, :colors, :image_urls, :external_ids)
+	end
+
+	def filter_cards(cards, params)
+		cards = cards.filter { |card| card.name.include?(params[:name]) } if params[:name].present?
+		cards = cards.filter { |card| card.colors.include?(params[:color]) } if params[:color].present?
+		cards
 	end
 end
