@@ -1,6 +1,4 @@
-class Card < ApplicationRecord
-	paginates_per 100
-	
+class Card < ApplicationRecord	
 	validates :name, presence: true
 	validates :colors, presence: true
 	validates :image_urls, presence: true 
