@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import CardsInDeckTile from "./CardsInDeckTile"
 import SearchCardTile from "./SearchCardTile"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleCheck } from "@fortawesome/free-solid-svg-icons"
+import { faCircleCheck, faSpinner } from "@fortawesome/free-solid-svg-icons"
 
 const Cards = (props) => {
 	const [getCardsInDeck, setCardsInDeck] = useState([])
 	const [searchCards, setSearchCards] = useState([])
 	const [searchString, setSearchString] = useState('')
 	const [searchCardTiles, setSearchCardTiles] = useState(null)
+	const [isLoading, setIsLoading] = useState(false)
+	const [selectedCard, setSelectedCard] = useState(null)
 
 	const checkCardsInDeck = async() => {
 		try {
@@ -35,21 +37,13 @@ const Cards = (props) => {
 		setSearchString(newSearchString)
 	}
 
-	const dedupedCards = (data) => {
-		console.log(data)
-		return data.filter((item, index, self) => 
-			index === self.findIndex((t) => (
-				t.name === item.name
-				))
-		)
-	}
-
 	const handleSubmit = async(event) => {
 		event.preventDefault()
 		const body = JSON.stringify({
 			search_string: searchString
 		})
 		console.log('search FETCH body:', body)
+		setIsLoading(true)
 		try {
 			const response = await fetch('/api/v1/cards/search', {
 				method: "POST",
@@ -65,39 +59,44 @@ const Cards = (props) => {
 				throw new Error(errorMessage)
 			}
 			const responseBody = await response.json()
-			console.log("handleSubmit responseBody:")
-			console.log(responseBody)
-			const dedupedArray = dedupedData(responseBody)
-			setSearchCards(dedupedArray)
+			console.log("handleSubmit responseBody:", responseBody)
+			setSearchCards(responseBody)
 		} catch (error) {
 			console.error(`Error in Fetch: ${error.message}`)
+		} finally {
+			setIsLoading(false)
 		}
 	}
 
 	useEffect(() => {
 		setSearchCardTiles(getSearchCardTiles)
-	}, [searchCardTiles])
+	}, [searchCards])
 
 	const getSearchCardTiles = () => {
+		console.log('getSearchCardTiles - searchCards:', searchCards)
 		return searchCards.map((card) => {
 			return(
-				<div key={card.id}>
-					<SearchCardTile card={card} key={card.id} />
+				<div key={card.id} onDoubleClick={() => setSelectedCard(card)}>
+					<SearchCardTile 
+					card={card} 
+					key={card.id}
+					addCardToDeck={addCardToDeck}
+					/>
 				</div>
 			)
 		})
 	}
 
-	const addCardToDeck = async() => {
+	const addCardToDeck = async(card) => {
 		try {
-			const response = await fetch(`/api/v1/cards`, {
-				method: "POST",
+			const response = await fetch(`/api/v1/cards/create`, {
+				method: "PATCH",
 				credentials: "same-origin",
 				headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ id: searchCardTiles[0].key, deck_id: props.currentDeckId })
+				body: JSON.stringify({ id: card.id, deck_id: props.currentDeckId })
 			})
 			console.log('addCardToDeck FETCH response:' ,response)
 		} catch (error) {
@@ -106,7 +105,7 @@ const Cards = (props) => {
 	}
 
 	return(
-		<div>
+		<div className="deck-grid-container">
 			<CardsInDeckTile
 				getCardsInDeck={getCardsInDeck}
 			/>
@@ -119,6 +118,7 @@ const Cards = (props) => {
 			<div className="deck-grid-container">
 				<div className="grid-x grid-margin-x">
 					<div className="grid-container cell medium">
+						{isLoading && <p><FontAwesomeIcon icon={faSpinner} />Searching for Cards...</p>}
 						{searchCardTiles}
 					</div>
 				</div>

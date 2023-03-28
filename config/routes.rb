@@ -14,7 +14,7 @@ Rails.application.routes.draw do
 			get '/cards/search', to: 'cards#search'
 			resources :users, only: [:index, :show]
 				resources :decks, only: [:index, :show, :create, :update, :destroy] do
-					resources :cards, only: [:index, :show, :create]
+					resources :cards, only: [:index, :show, :create, :update]
 				end
 		end
 	end
