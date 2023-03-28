@@ -56,7 +56,7 @@ class Api::V1::CardsController < ApiController
 	end	
 
 	def show
-		deck = Deck.find(id: params[:deck_id])
+		deck = Deck.find( params[:deck_id])
 		cardsInDeck = deck.cards
 		render json: cardsInDeck, each_serializer: CardSerializer
 	end

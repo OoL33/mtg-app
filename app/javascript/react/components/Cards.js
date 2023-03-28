@@ -89,8 +89,8 @@ const Cards = (props) => {
 
 	const addCardToDeck = async(card) => {
 		try {
-			const response = await fetch(`/api/v1/cards/create`, {
-				method: "PATCH",
+			const response = await fetch(`/api/v1/decks/${props.currentDeckId}/cards`, {
+				method: "POST",
 				credentials: "same-origin",
 				headers: {
 					'Accept': 'application/json',
