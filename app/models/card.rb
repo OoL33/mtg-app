@@ -15,11 +15,6 @@ class Card < ApplicationRecord
 		end
 	end
 
-	# # Optional: Define getter and setter methods for external_ids field
-	# def external_ids
-	# 	super || [] # Return an empty array if external_ids is nil
-	# end
-
 	def external_ids=(value)
 		value = Array(value).reject(&:blank?).map(&:to_i) # Convert to array of integers
 		super(value)
