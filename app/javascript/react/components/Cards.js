@@ -91,7 +91,6 @@ const Cards = (props) => {
 	}
 
 	const addCardToDeck = async(card) => {
-		debugger
 		try {
 			const response = await fetch(`/api/v1/decks/${props.currentDeckId}/cards`, {
 				method: "POST",
@@ -102,7 +101,6 @@ const Cards = (props) => {
 				},
 				body: JSON.stringify({ card })
 			})
-			debugger
 			console.log('addCardToDeck FETCH response:', response)
 		} catch (error) {
 			console.error(`Error in fetch: ${error.message}`)
