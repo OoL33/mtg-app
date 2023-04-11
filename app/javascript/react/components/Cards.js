@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect } from "react"
 import CardsInDeckTile from "./CardsInDeckTile"
 import SearchCardTile from "./SearchCardTile"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -73,8 +73,11 @@ const Cards = (props) => {
 	}, [searchCards])
 
 	const getSearchCardTiles = () => {
-		console.log('getSearchCardTiles - searchCards:', searchCards)
-		return searchCards.map((card) => {
+		console.log('getSearchCardTiles - searchCards:', searchCards.cards)
+		if (!searchCards || !searchCards.cards) {
+			return null
+		}
+		return searchCards.cards.map((card) => {
 			return(
 				<div key={card.id} onDoubleClick={() => setSelectedCard(card)}>
 					<SearchCardTile 
@@ -88,6 +91,7 @@ const Cards = (props) => {
 	}
 
 	const addCardToDeck = async(card) => {
+		debugger
 		try {
 			const response = await fetch(`/api/v1/decks/${props.currentDeckId}/cards`, {
 				method: "POST",
@@ -96,9 +100,10 @@ const Cards = (props) => {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ id: card.id, deck_id: props.currentDeckId })
+				body: JSON.stringify({ card })
 			})
-			console.log('addCardToDeck FETCH response:' ,response)
+			debugger
+			console.log('addCardToDeck FETCH response:', response)
 		} catch (error) {
 			console.error(`Error in fetch: ${error.message}`)
 		}
