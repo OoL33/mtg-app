@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_29_041343) do
+ActiveRecord::Schema.define(version: 2023_04_11_141721) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,9 +19,9 @@ ActiveRecord::Schema.define(version: 2022_11_29_041343) do
     t.string "name", null: false
     t.string "colors", null: false
     t.string "image_urls", null: false
-    t.string "external_ids", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "external_ids", default: [], array: true
   end
 
   create_table "deck_cards", force: :cascade do |t|
