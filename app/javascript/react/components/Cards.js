@@ -45,7 +45,7 @@ const Cards = (props) => {
 		console.log('search FETCH body:', body)
 		setIsLoading(true)
 		try {
-			const response = await fetch('/api/v1/cards/search', {
+			const response = await fetch('/api/v1/api_cards/search', {
 				method: "POST",
 				credentials: "same-origin",
 				body: body,
@@ -73,10 +73,8 @@ const Cards = (props) => {
 	}, [searchCards])
 
 	const getSearchCardTiles = () => {
-		console.log('getSearchCardTiles - searchCards:', searchCards.cards)
-		if (!searchCards || !searchCards.cards) {
-			return null
-		}
+    if (searchCards && searchCards.cards) {
+		console.log('getSearchCardTiles - searchCards:', searchCards)
 		return searchCards.cards.map((card) => {
 			return(
 				<div key={card.id} onDoubleClick={() => setSelectedCard(card)}>
@@ -88,6 +86,9 @@ const Cards = (props) => {
 				</div>
 			)
 		})
+  } else {
+    return null; // Return null or a placeholder if searchCards or searchCards.cards is undefined 
+  }
 	}
 
 	const addCardToDeck = async(card) => {
@@ -99,7 +100,7 @@ const Cards = (props) => {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ card })
+				body: JSON.stringify({ card, deck_id: props.currentDeckId })
 			})
 			console.log('addCardToDeck FETCH response:', response)
 		} catch (error) {
