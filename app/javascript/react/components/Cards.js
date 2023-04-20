@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect } from "react"
 import CardsInDeckTile from "./CardsInDeckTile"
 import SearchCardTile from "./SearchCardTile"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -102,7 +102,7 @@ const Cards = (props) => {
 				},
 				body: JSON.stringify({ card, deck_id: props.currentDeckId })
 			})
-			console.log('addCardToDeck FETCH response:' ,response)
+			console.log('addCardToDeck FETCH response:', response)
 		} catch (error) {
 			console.error(`Error in fetch: ${error.message}`)
 		}
