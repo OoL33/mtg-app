@@ -39,6 +39,20 @@ class Api::V1::CardsController < ApiController
 		end
 	end
 
+  def destroy
+    # Find the deck_card row with the specified card_id and deck_id
+    deck_card = DeckCard.find_by(deck_id: deck_id, card_id: card_id)
+
+    if deck_card.nil?
+      # The card is not in the deck, handle this error case as appropriate
+      render json: { error: 'No card found' }, status: :not_found
+    else
+      # Delete the deck_card row
+      deck_card.destroy
+      render json: { message: 'Card successfully removed from the deck' }, status: :ok
+    end
+  end
+
 	private
 
 	def card_params
