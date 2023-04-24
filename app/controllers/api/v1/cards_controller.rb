@@ -14,7 +14,7 @@ class Api::V1::CardsController < ApiController
 
   def create
     deck = Deck.find_by(id: params[:deck_id])
-    card = find_or_create_card(deck)
+    card = deck.cards.find_or_create_card(params)
   
     if card.persisted?
       deck.cards << card
@@ -34,9 +34,11 @@ class Api::V1::CardsController < ApiController
 	def update
 		deck = Deck.find(params[:deck_id])
 		card = Card.find_or_create_by(card_params)
+
 		unless deck.cards.include?(card)
 			deck.cards << card
 		end
+    render json: card, status: :ok
 	end
 
   def destroy
