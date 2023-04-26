@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons"
 
 const SearchCardTile = (props) => {
-  debugger
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
   const addCardButtonRef = useRef(null)
 
