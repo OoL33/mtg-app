@@ -14,7 +14,7 @@ class Api::V1::CardsController < ApiController
 
   def create
     deck = Deck.find_by(id: params[:deck_id])
-    card = deck.cards.find_or_create_card(params)
+    card = find_or_create_card(deck, params)
   
     if card.persisted?
       deck.cards << card
@@ -61,7 +61,7 @@ class Api::V1::CardsController < ApiController
 		params.require(:card).permit(:name, :colors, :image_urls, external_ids: [])
 	end
 
-  def find_or_create_card(deck)
+  def find_or_create_card(deck, params)
     return Card.new(card_params.merge(external_ids: params[:card][:external_ids])) unless params[:card].present?
 
     external_ids = params[:card][:external_ids].map(&:to_i)
