@@ -8,10 +8,10 @@ const DeckShowPage = (props) => {
 	const history = useHistory()
 
 	const [deck, setDeck] = useState({
-    id: '',
+    id: 0,
     name: '',
     description: '',
-    user_id: ''
+    user_id: 0,
   })  
 
 	const fetchDeck = async() => {

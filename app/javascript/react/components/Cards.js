@@ -20,8 +20,6 @@ const Cards = (props) => {
         throw new Error(errorMessage)
       }
       const responseBody = await response.json()
-			console.log("checkCardsInDeck responseBody:")
-			console.log(responseBody.cards)
 			setCardsInDeck(responseBody.cards)
 		} catch (error) {
 			console.error(`Error in fetch: ${error.message}`)
@@ -42,7 +40,6 @@ const Cards = (props) => {
 		const body = JSON.stringify({
 			search_string: searchString
 		})
-		console.log('search FETCH body:', body)
 		setIsLoading(true)
 		try {
 			const response = await fetch('/api/v1/api_cards/search', {
@@ -74,7 +71,6 @@ const Cards = (props) => {
 
 	const getSearchCardTiles = () => {
     if (searchCards && searchCards.cards) {
-		console.log('getSearchCardTiles - searchCards:', searchCards)
 		return searchCards.cards.map((card) => {
 			return(
 				<div key={card.id} onDoubleClick={() => setSelectedCard(card)}>
@@ -91,7 +87,7 @@ const Cards = (props) => {
   }
 	}
 
-	const addCardToDeck = async(card) => {
+  const addCardToDeck = async(card) => {
 		try {
 			const response = await fetch(`/api/v1/decks/${props.currentDeckId}/cards`, {
 				method: "POST",
@@ -102,9 +98,14 @@ const Cards = (props) => {
 				},
 				body: JSON.stringify({ card, deck_id: props.currentDeckId })
 			})
-			console.log('addCardToDeck FETCH response:', response)
+      if (response.ok) {
+        const responseBody = await response.json()
+        console.log('addCardToDeck FETCH response:', responseBody)
+      } else {
+        console.error(`Failed to fetch: ${response.status}`);
+      }
 		} catch (error) {
-			console.error(`Error in fetch: ${error.message}`)
+			console.error(`Error in addCardToDeck fetch: ${error.message}`)
 		}
 	}
 
@@ -113,7 +114,6 @@ const Cards = (props) => {
 			<CardsInDeckTile
 				getCardsInDeck={getCardsInDeck}
 			/>
-			<a className="button" onClick={addCardToDeck}><FontAwesomeIcon icon={faCircleCheck} /> Add Card to Deck</a>
 			<form onSubmit={handleSubmit}>
 				<label>Search for a Card</label>
 				<input type='text' name='searchString' value={searchString} onChange={handleChange} />
