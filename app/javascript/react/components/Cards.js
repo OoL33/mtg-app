@@ -2,15 +2,17 @@ import React, { useState, useEffect } from "react"
 import CardsInDeckTile from "./CardsInDeckTile"
 import SearchCardTile from "./SearchCardTile"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleCheck, faSpinner } from "@fortawesome/free-solid-svg-icons"
+import { faSpinner } from "@fortawesome/free-solid-svg-icons"
 
 const Cards = (props) => {
-	const [getCardsInDeck, setCardsInDeck] = useState([])
+	const [cardsInDeck, setCardsInDeck] = useState([])
 	const [searchCards, setSearchCards] = useState([])
 	const [searchString, setSearchString] = useState('')
 	const [searchCardTiles, setSearchCardTiles] = useState(null)
 	const [isLoading, setIsLoading] = useState(false)
 	const [selectedCard, setSelectedCard] = useState(null)
+  const [numOfCards, setNumOfCards] = useState(0);
+
 
 	const checkCardsInDeck = async() => {
 		try {
@@ -67,7 +69,7 @@ const Cards = (props) => {
 
 	useEffect(() => {
 		setSearchCardTiles(getSearchCardTiles)
-	}, [searchCards])
+	}, [searchCards, searchString])
 
 	const getSearchCardTiles = () => {
     if (searchCards && searchCards.cards) {
@@ -87,32 +89,67 @@ const Cards = (props) => {
   }
 	}
 
-  const addCardToDeck = async(card) => {
-		try {
-			const response = await fetch(`/api/v1/decks/${props.currentDeckId}/cards`, {
-				method: "POST",
-				credentials: "same-origin",
-				headers: {
+  const addCardToDeck = async (card) => {
+    try {
+        const response = await fetch(`/api/v1/decks/${props.currentDeckId}/cards`, {
+            method: "POST",
+            credentials: "same-origin",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ card, deck_id: props.currentDeckId }),
+        })
+        if (response.ok) {
+            const responseBody = await response.json()
+            console.log("addCardToDeck FETCH response:", responseBody.deck.cards)
+            if (
+                (responseBody.deck.cards && responseBody.deck.cards.length)
+                ) {
+                setCardsInDeck(responseBody.deck.cards)
+                const numOfCards = responseBody.deck.cards.length
+                setNumOfCards(numOfCards)
+            } else {
+                console.error("Failed to add card to deck")
+            }
+        } else {
+            console.error(`Failed to fetch: ${response.status}`)
+        }
+    } catch (error) {
+        console.error(`Error in addCardToDeck fetch: ${error.message}`)
+    }
+  }
+
+  const removeCardFromDeck = async(selectedCard, cardsInDeck, setCardsInDeck) => {
+    try {
+      const response = await fetch(`/api/v1/decks/${props.currentDeckId}/cards/${selectedCard.id}`, {
+        method: "DELETE",
+        credentials: "same-origin",
+        headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ card, deck_id: props.currentDeckId })
-			})
-      if (response.ok) {
-        const responseBody = await response.json()
-        console.log('addCardToDeck FETCH response:', responseBody)
-      } else {
-        console.error(`Failed to fetch: ${response.status}`);
-      }
-		} catch (error) {
-			console.error(`Error in addCardToDeck fetch: ${error.message}`)
-		}
-	}
+      })
+      if(!response.ok) {
+				const errorMessage = `${response.status} (${response.statusText})`
+				throw new Error(errorMessage)
+			}
+      console.log('cardsInDeck:', cardsInDeck)
+      const remainingCardsInDeck = cardsInDeck.filter((cardInDeck) => {
+        return cardInDeck.id !== selectedCard
+      })
+      setCardsInDeck(remainingCardsInDeck)
+    } catch (error) {
+      console.error(`Error in DELETE Card fetch: ${error.message}`)
+    }
+  }
 
 	return(
 		<div className="deck-grid-container">
 			<CardsInDeckTile
-				getCardsInDeck={getCardsInDeck}
+				cardsInDeck={cardsInDeck}
+        removeCardFromDeck={removeCardFromDeck}
+        selectedCard={selectedCard}
 			/>
 			<form onSubmit={handleSubmit}>
 				<label>Search for a Card</label>
