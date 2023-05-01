@@ -42,6 +42,10 @@ class Api::V1::CardsController < ApiController
 	end
 
   def destroy
+    # Get the deck_id and card_id parameters from the request
+    deck_id = params[:deck_id]
+    card_id = params[:id]
+    
     # Find the deck_card row with the specified card_id and deck_id
     deck_card = DeckCard.find_by(deck_id: deck_id, card_id: card_id)
 
