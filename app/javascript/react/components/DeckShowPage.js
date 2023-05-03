@@ -7,7 +7,12 @@ import Cards from "./Cards"
 const DeckShowPage = (props) => {
 	const history = useHistory()
 
-	const [deck, setDeck] = useState({})
+	const [deck, setDeck] = useState({
+    id: 0,
+    name: '',
+    description: '',
+    user_id: 0,
+  })  
 
 	const fetchDeck = async() => {
 		try {
@@ -19,12 +24,13 @@ const DeckShowPage = (props) => {
         throw new Error(errorMessage)
       }
       const responseBody = await response.json()
-			console.log(deckId)
-			console.log("fetchDeck responseBody:")
-			console.log(responseBody)
-			const singleDeckData = responseBody
-			console.log(singleDeckData)
-      setDeck(singleDeckData)
+			const singleDeckData = responseBody.deck
+      setDeck({
+        id: singleDeckData.id,
+        name: singleDeckData.name,
+        description: singleDeckData.description,
+        user_id: singleDeckData.user_id,
+      })
     } catch (error) {
       console.error(`Error in fetch: ${error.message}`)
     }

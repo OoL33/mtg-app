@@ -1,11 +1,22 @@
-import React from "react"
+import React, { useState, useRef } from "react"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faCircleCheck } from "@fortawesome/free-solid-svg-icons"
 
 const SearchCardTile = (props) => {
-	const { card, addCardToDeck } = props 
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+  const addCardButtonRef = useRef(null)
 
-	const handleDoubleClick = () => {
-		addCardToDeck(card)
+	const handleDoubleClick = async () => {
+    await props.addCardToDeck(props.card)
+		setShowSuccessMessage(true)
+    if (addCardButtonRef.current) {
+      addCardButtonRef.current.click()
+    }
 	}
+
+  const handleSuccessMessageClose = () => {
+    setShowSuccessMessage(false)
+  }
 
 	return(
 	<div>
@@ -14,9 +25,17 @@ const SearchCardTile = (props) => {
 				<div className="callout" data-equalizer-watch onDoubleClick={handleDoubleClick}>
 				{props.card.name}
 				<img src={props.card.image_urls} />
+        <a className="button" ref={addCardButtonRef}>
+          <FontAwesomeIcon icon={faCircleCheck} /> Add Card to Deck</a>
 				</div>
 			</div>
 		</div>
+    {showSuccessMessage && (
+      <div className="success-message">
+        Card added to Deck!
+        <button onClick={handleSuccessMessageClose}>Close</button>
+      </div>
+    )}
 	</div>
 	)
 }
