@@ -11,7 +11,7 @@ const Cards = (props) => {
 	const [searchCardTiles, setSearchCardTiles] = useState(null)
 	const [isLoading, setIsLoading] = useState(false)
 	const [selectedCard, setSelectedCard] = useState(null)
-  const [numOfCards, setNumOfCards] = useState(0);
+  const [numOfCards, setNumOfCards] = useState(0)
 
 
 	const checkCardsInDeck = async() => {
@@ -58,7 +58,6 @@ const Cards = (props) => {
 				throw new Error(errorMessage)
 			}
 			const responseBody = await response.json()
-			console.log("handleSubmit responseBody:", responseBody)
 			setSearchCards(responseBody)
 		} catch (error) {
 			console.error(`Error in Fetch: ${error.message}`)
@@ -85,63 +84,61 @@ const Cards = (props) => {
 			)
 		})
   } else {
-    return null; // Return null or a placeholder if searchCards or searchCards.cards is undefined 
+    return null // Return null or a placeholder if searchCards or searchCards.cards is undefined 
   }
 	}
 
   const addCardToDeck = async (card) => {
     try {
-        const response = await fetch(`/api/v1/decks/${props.currentDeckId}/cards`, {
-            method: "POST",
-            credentials: "same-origin",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ card, deck_id: props.currentDeckId }),
-        })
-        if (response.ok) {
-            const responseBody = await response.json()
-            console.log("addCardToDeck FETCH response:", responseBody.deck.cards)
-            if (
-                (responseBody.deck.cards && responseBody.deck.cards.length)
-                ) {
-                setCardsInDeck(responseBody.deck.cards)
-                const numOfCards = responseBody.deck.cards.length
-                setNumOfCards(numOfCards)
-            } else {
-                console.error("Failed to add card to deck")
-            }
+      const response = await fetch(`/api/v1/decks/${props.currentDeckId}/cards`, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ card, deck_id: props.currentDeckId }),
+      })
+      if (response.ok) {
+        const responseBody = await response.json()
+        if (
+          (responseBody.deck.cards && responseBody.deck.cards.length)
+        ) {
+          setCardsInDeck(responseBody.deck.cards)
+          const numOfCards = responseBody.deck.cards.length
+          setNumOfCards(numOfCards)
         } else {
-            console.error(`Failed to fetch: ${response.status}`)
+          console.error("Failed to add card to deck")
         }
+      } else {
+        console.error(`Failed to fetch: ${response.status}`)
+      }
     } catch (error) {
-        console.error(`Error in addCardToDeck fetch: ${error.message}`)
+      console.error(`Error in addCardToDeck fetch: ${error.message}`)
     }
   }
 
-  const removeCardFromDeck = async(selectedCard, cardsInDeck, setCardsInDeck) => {
+  const removeCardFromDeck = async (selectedCard) => {
     try {
       const response = await fetch(`/api/v1/decks/${props.currentDeckId}/cards/${selectedCard.id}`, {
-        method: "DELETE",
+        method: "DELETE", 
         credentials: "same-origin",
         headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
       })
-      if(!response.ok) {
-				const errorMessage = `${response.status} (${response.statusText})`
-				throw new Error(errorMessage)
-			}
-      console.log('cardsInDeck:', cardsInDeck)
-      const remainingCardsInDeck = cardsInDeck.filter((cardInDeck) => {
-        return cardInDeck.id !== selectedCard
+      if (!response.ok) {
+        const errorMessage = `${response.status} (${response.statusText})`
+        throw new Error(errorMessage)
+      } const remainingCardsInDeck = cardsInDeck.filter((cardInDeck) => {
+        return cardInDeck.id !== selectedCard.id
       })
       setCardsInDeck(remainingCardsInDeck)
-    } catch (error) {
+      setNumOfCards(remainingCardsInDeck.length)
+    } catch (error) { 
       console.error(`Error in DELETE Card fetch: ${error.message}`)
-    }
+    } 
   }
 
 	return(
