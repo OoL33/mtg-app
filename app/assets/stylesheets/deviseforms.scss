@@ -10,7 +10,6 @@
 }
 
 .form-container, .devise-form {
-	font-family: 'Uncial Antiqua', cursive;
 	text-align: center;
 	background-color: #a78ac5c7;
 }
@@ -18,18 +17,20 @@
 h2 {
 	font-family: 'Uncial Antiqua', cursive;
 	font-weight: 500;
-	padding-bottom: 50px;
+	padding: 30px;
 	color: black
 }
 
 label {
 	font-size: larger;
+  font-family: 'Uncial Antiqua', cursive;
 }
 
 input {
-	object-position: 10ch 8em;
+	object-position: 50% 50%;
 }
 
 a.actions {
 	color: #330C5C;
+  padding: 30px;
 }
