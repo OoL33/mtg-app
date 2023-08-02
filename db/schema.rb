@@ -19,9 +19,9 @@ ActiveRecord::Schema.define(version: 2023_04_11_141721) do
     t.string "name", null: false
     t.string "colors", null: false
     t.string "image_urls", null: false
+    t.integer "external_ids", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "external_ids", default: [], array: true
   end
 
   create_table "deck_cards", force: :cascade do |t|
