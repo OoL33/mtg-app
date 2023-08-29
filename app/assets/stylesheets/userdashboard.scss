@@ -1,11 +1,23 @@
-.createNewDeck {
-	color: #000000;
+body {
+	background: hsl(0, 0%, 100%);
 }
 
-body {
-	background: #d5d5d5;
+#create_new_deck {
+	height: 100%;
+	width: 50%;
+	text-align: center;
+}
+
+.link {
+	color: #401b67;
 }
 
 .deck-grid-container {
-	color: #000000
+	color: #000000;
+	color: #330C5C;
+}
+
+.deck_tile {
+	text-align: center;
+	color: #330C5C;
 }
