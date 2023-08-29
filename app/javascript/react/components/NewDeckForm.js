@@ -1,108 +1,104 @@
-import React, { useState } from "react"
-import ErrorList from "./ErrorList"
-import _ from "lodash"
-import { useHistory } from "react-router-dom"
+import React, { useState } from "react";
+import ErrorList from "./ErrorList";
+import _ from "lodash";
+import { useHistory } from "react-router-dom";
 
 const NewDeckForm = (props) => {
-	const history = useHistory()
+  const history = useHistory();
 
-  const [shouldRedirect, setShouldRedirect] = useState(false)
+  const [shouldRedirect, setShouldRedirect] = useState(false);
   const [newDeck, setNewDeck] = useState({
     name: "",
-    description: ""
-  })
-	const [errors, setErrors] = useState({})
+    description: "",
+  });
+  const [errors, setErrors] = useState({});
 
   const handleInputChange = (event) => {
     setNewDeck({
       ...newDeck,
-      [event.currentTarget.name]: event.currentTarget.value
-    })
-  }
+      [event.currentTarget.name]: event.currentTarget.value,
+    });
+  };
 
-	const validForSubmission = () => {
-		let submitErrors = {}
-		const requiredFields = ["name", "description"]
-		requiredFields.forEach(field => {
-			if (newDeck[field].trim() === "") {
-				submitErrors = {
-					...submitErrors,
-					[field]: "is blank"
-				}
-			}
-		})
-		setErrors(submitErrors)
-		return _.isEmpty(submitErrors)
-	}
+  const validForSubmission = () => {
+    let submitErrors = {};
+    const requiredFields = ["name", "description"];
+    requiredFields.forEach((field) => {
+      if (newDeck[field].trim() === "") {
+        submitErrors = {
+          ...submitErrors,
+          [field]: "is blank",
+        };
+      }
+    });
+    setErrors(submitErrors);
+    return _.isEmpty(submitErrors);
+  };
 
-  const postNewDeck = async(event) => {
-		event.preventDefault()
+  const postNewDeck = async (event) => {
+    event.preventDefault();
 
-		if (validForSubmission()) {
-			try {
-				const response = await fetch(`/api/v1/decks`, {
-					method: "POST",
-					credentials: "same-origin",
-					headers: {
-						'Accept': 'application/json',
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({ decks: newDeck })
-				})
-				if(!response.ok) {
-					const errorMessage = `${response.status} (${response.statusText})`
-					throw new Error(errorMessage)
-				}
-				const responseBody = await response.json()
-				if (responseBody.errors) {
-
-					setErrors(responseBody.errors)
-				} else {
-					setShouldRedirect(true)
-				}
-			} catch (error) {
-				console.error(`Error in fetch: ${error.message}`)
-			}
-		}
-	}
+    if (validForSubmission()) {
+      try {
+        const response = await fetch(`/api/v1/decks`, {
+          method: "POST",
+          credentials: "same-origin",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ decks: newDeck }),
+        });
+        if (!response.ok) {
+          const errorMessage = `${response.status} (${response.statusText})`;
+          throw new Error(errorMessage);
+        }
+        const responseBody = await response.json();
+        if (responseBody.errors) {
+          setErrors(responseBody.errors);
+        } else {
+          setShouldRedirect(true);
+        }
+      } catch (error) {
+        console.error(`Error in fetch: ${error.message}`);
+      }
+    }
+  };
 
   if (shouldRedirect) {
-		history.go(-1);
+    history.go(-1);
   }
 
-  return(
-		<div className="callout new-deck grid-container form-container">
-    <form onSubmit={postNewDeck}>
-			<ErrorList errors={errors}/>
-      <label>
-        Deck Name:
-        <input 
-          name="name"
-          type="text"
-          id="name"
-          value={newDeck.name}
-          onChange={handleInputChange}
-        />
-      </label>
-      <label>
-        Deck Description:
-        <input 
-          name="description"
-          type="text"
-          id="description"
-          value={newDeck.description}
-          onChange={handleInputChange}
-        />
-      </label>
-      <button className="submit">
-        <input 
-          className="button"
-          type="submit"
-					/>
-      </button>
-    </form>
-		</div>
-  )
-}
+  return (
+    <div className="callout new-deck grid-container form-container">
+      <form onSubmit={postNewDeck}>
+        <ErrorList errors={errors} />
+        <label>
+          Deck Name:
+          <input
+            name="name"
+            type="text"
+            id="name"
+            value={newDeck.name}
+            onChange={handleInputChange}
+          />
+        </label>
+        <label>
+          Deck Description:
+          <input
+            name="description"
+            type="text"
+            id="description"
+            value={newDeck.description}
+            onChange={handleInputChange}
+          />
+        </label>
+        <button className="submit">
+          <input className="button" type="submit" />
+        </button>
+      </form>
+    </div>
+  );
+};
 
-export default NewDeckForm
+export default NewDeckForm;
