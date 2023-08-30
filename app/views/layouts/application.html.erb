@@ -7,23 +7,27 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <div class="nav-bar">
-  <nav class="top-bar">
-    <h1><a href="/">MTG Deck Builder</a></h1>
 
+  <nav class="top-bar">
+    <h1><a class="header-link" href="/">MTG Deck Builder</a></h1>
     <section class="top-bar-section">
-      <ul class="right">
         <%- if current_user -%>
-					<li class="clear button"><%= link_to 'Dashboard', user_session_path %></li>
-          <li class="clear button"><%= link_to 'Sign Out', destroy_user_session_path, method: :delete %></li>
+        <button type="button" class="button">
+          <%= link_to 'Dashboard', user_session_path %></li>
+          </button>
+          <button type="button" class="button">
+          <%= link_to 'Sign Out', destroy_user_session_path, method: :delete %></li>
+          </button>
         <%- else -%>
-          <li class="clear button"><%= link_to 'Sign Up', new_user_registration_path %></li>
-          <li class="clear button"><%= link_to 'Sign In', new_user_session_path %></li>
+        <button type="button" class="button">
+        <%= link_to 'Sign Up', new_user_registration_path %></li>
+          </button>
+          <button type="button" class="button">
+          <%= link_to 'Sign In', new_user_session_path %></li>
+          </button>
         <%- end -%>
-      </ul>
     </section>
   </nav>
-	<div class="nav-bar">
 
   <%- flash.each do |key, value| -%>
     <div class="flash flash-<%= key %>">

@@ -1,4 +1,4 @@
-.createNewDeck {
+.create-new-deck {
 	color: #000000;
 }
 
@@ -6,6 +6,20 @@ body {
 	background: #d5d5d5;
 }
 
-.deck-grid-container {
-	color: #000000
+// .card, h2 {
+// 	text-align: center;
+// }
+
+.cell{
+	margin-bottom: 1em;
+}
+
+.card {
+	background-color: #CCD5AE;
+	text-align: center;
+	margin: 1em;
+	
+	&:hover{
+	  background-color: #D4A373;
+	}
 }

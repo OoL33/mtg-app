@@ -5,14 +5,34 @@
 	background: #330C5C;
 }
 
-.top-bar ul {
-	background-color: transparent;
+.header-link{
+	color: #e02ab5;
+	
+	&:hover{
+		color: #E9EDC9;
+	}
 }
 
 h1 {
 	font-family: 'Uncial Antiqua', cursive;
 }
 
-a {
-	color: #fffaf0;
+.button{
+	background-color: #32fa6e;
+	color: #000000;
+	border-radius: 1em;
+
+	&:hover{
+		background-color: #ffb701;
+		color: #000000;
+	}
+}
+
+.button>a{
+	color: #000000;
+	border-radius: 1em;
+}
+
+.webpage {
+	margin: 1em;
 }

@@ -1,19 +1,18 @@
-import React from "react"
-import card_game from "../../../assets/images/noun-magic-cards.svg"
+import React from "react";
+import card_game from "../../../assets/images/noun-magic-cards.svg";
 
 const DeckTile = (props) => {
-  return(
-	<div>
-		<h1>{props.deck.name}</h1>
-		<div className="grid-x grid-margin-x" data-equalizer data-equalize-on="medium" id="test-eq">
-			<div className="cell medium-4">
-				<div className="callout" data-equalizer-watch>
-					<img src={card_game} alt="blank playing card"></img>
-				</div>
-			</div>
-		</div>
-	</div>
-  )
-}
+  return (
+    <div className="cell">
+      <div className="card callout">
+        <div className="card-section">
+          <h3 className="deck-title">{props.deck.name}</h3>
+        </div>
+        <div className="card-section"></div>
+        <img src={card_game} alt="blank playing card"></img>
+      </div>
+    </div>
+  );
+};
 
-export default DeckTile
+export default DeckTile;
