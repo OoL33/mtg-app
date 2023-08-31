@@ -1,145 +1,163 @@
-import React, { useState, useEffect } from "react"
-import { useHistory } from "react-router-dom"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPenToSquare, faCircleCheck, faTrash } from "@fortawesome/free-solid-svg-icons"
-import Cards from "./Cards"
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPenToSquare,
+  faCircleCheck,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
+import Cards from "./Cards";
 
 const DeckShowPage = (props) => {
-	const history = useHistory()
+  const history = useHistory();
 
-	const [deck, setDeck] = useState({})
+  const [deck, setDeck] = useState({});
 
-	const fetchDeck = async() => {
-		try {
-			
-			const deckId = props.match.params.id
-      const response = await fetch(`/api/v1/decks/${deckId}`)
-      if(!response.ok) {
-        const errorMessage = `${response.status} (${response.statusText})`
-        throw new Error(errorMessage)
+  const fetchDeck = async () => {
+    try {
+      const deckId = props.match.params.id;
+      const response = await fetch(`/api/v1/decks/${deckId}`);
+      if (!response.ok) {
+        const errorMessage = `${response.status} (${response.statusText})`;
+        throw new Error(errorMessage);
       }
-      const responseBody = await response.json()
-			console.log(deckId)
-			console.log("fetchDeck responseBody:")
-			console.log(responseBody)
-			const singleDeckData = responseBody
-			console.log(singleDeckData)
-      setDeck(singleDeckData)
+      const responseBody = await response.json();
+      console.log(deckId);
+      console.log("fetchDeck responseBody:");
+      console.log(responseBody);
+      const singleDeckData = responseBody;
+      console.log(singleDeckData);
+      setDeck(singleDeckData);
     } catch (error) {
-      console.error(`Error in fetch: ${error.message}`)
+      console.error(`Error in fetch: ${error.message}`);
     }
-	}
+  };
 
-	useEffect(() => {
-		fetchDeck()
-	}, [])
+  useEffect(() => {
+    fetchDeck();
+  }, []);
 
-	const [userEditing, setUserEditing] = useState(false)
+  const [userEditing, setUserEditing] = useState(false);
 
-	const updateDeck = async() => {
-		try {
-			const deckId = props.match.params.id
-			const response = await fetch(`/api/v1/decks/${deckId}`, {
-				method: "PUT",
-				credentials: "same-origin",
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ decks: deck })
-			})
-			if(!response.ok) {
-				const errorMessage = `${response.status} (${response.statusText})`
-				throw new Error(errorMessage)
-			}
-			const responseBody = await response.json()
-			const singleDeckData = responseBody.deck
-			setDeck(singleDeckData)
-		} catch (error) {
-			console.error(`Error in fetch: ${error.message}`)
-		}
-	}
+  const updateDeck = async () => {
+    try {
+      const deckId = props.match.params.id;
+      const response = await fetch(`/api/v1/decks/${deckId}`, {
+        method: "PUT",
+        credentials: "same-origin",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ decks: deck }),
+      });
+      if (!response.ok) {
+        const errorMessage = `${response.status} (${response.statusText})`;
+        throw new Error(errorMessage);
+      }
+      const responseBody = await response.json();
+      const singleDeckData = responseBody.deck;
+      setDeck(singleDeckData);
+    } catch (error) {
+      console.error(`Error in fetch: ${error.message}`);
+    }
+  };
 
-	const editDeckProperties = () => {
-		setUserEditing(!userEditing)
-	}
-	const saveDeckProperties = async() => {
-		await updateDeck(deck.id, deck.name, deck.description, deck.user_id)
-		setUserEditing(false)
-	}
+  const editDeckProperties = () => {
+    setUserEditing(!userEditing);
+  };
+  const saveDeckProperties = async () => {
+    await updateDeck(deck.id, deck.name, deck.description, deck.user_id);
+    setUserEditing(false);
+  };
 
-	const handleNameChange = (event) => {
-		setDeck({
-			...deck,
-			[event.currentTarget.name]: event.currentTarget.value,
-		})
-	}
+  const handleNameChange = (event) => {
+    setDeck({
+      ...deck,
+      [event.currentTarget.name]: event.currentTarget.value,
+    });
+  };
 
-	const deleteDeck = async() => {
-		try {
-			const deckId = props.match.params.id
-			const response = await fetch(`/api/v1/decks/${deckId}`, {
-				method: "DELETE",
-				credentials: "same-origin",
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-			})
-			if(!response.ok) {
-				const errorMessage = `${response.status} (${response.statusText})`
-				throw new Error(errorMessage)
-			}
-		} catch (error) {
-			console.error(`Error in fetch: ${error.message}`)
-		}
-	}
+  const deleteDeck = async () => {
+    try {
+      const deckId = props.match.params.id;
+      const response = await fetch(`/api/v1/decks/${deckId}`, {
+        method: "DELETE",
+        credentials: "same-origin",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        const errorMessage = `${response.status} (${response.statusText})`;
+        throw new Error(errorMessage);
+      }
+    } catch (error) {
+      console.error(`Error in fetch: ${error.message}`);
+    }
+  };
 
-	const deleteDeckProperties = async() => {
-		await deleteDeck()
-		setUserEditing(false)
-		history.go(-4)
-	}
+  const deleteDeckProperties = async () => {
+    await deleteDeck();
+    setUserEditing(false);
+    history.go(-4);
+  };
 
-  return(
-    <div className="callout grid-container form-container">
-			{!userEditing &&
-				<div> 
-					<h1>{deck.name}</h1>
-					<p>{deck.description}</p>
-					<FontAwesomeIcon icon={faPenToSquare} /><button onClick={editDeckProperties}> Edit Deck</button>
-					<Cards
-						currentDeck={deck}
-						currentDeckId={props.match.params.id}
-					/>					
-				</div>
-			} 
-			{userEditing &&
-				<div>
-					<input 
-						name="name"
-						id="name"
-						type="text"
-						placeholder="Deck Name"
-						value={deck.name}
-						onChange={(event) => {handleNameChange(event)}}
-					/>
-					<input
-						name="description"
-						id="id" 
-						type="text"
-						placeholder="Deck Description"
-						value={deck.description}
-						onChange={(event) => {handleNameChange(event)}}
-					/>
-					<div className="small button-group">
-						<a className="button" onClick={saveDeckProperties}><FontAwesomeIcon icon={faCircleCheck} /> Save</a>
-						<a className="button" onClick={deleteDeckProperties}><FontAwesomeIcon icon={faTrash} /> Delete Deck</a>
-					</div>
-				</div>
-			}
+  return (
+    <div className="grid-container">
+      <div className="grid-x grid-margin-x">
+        <div className="grid-container cell">
+          <div className="callout grid-container form-container">
+            {!userEditing && (
+              <div>
+                <h1>{deck.name}</h1>
+                <p>{deck.description}</p>
+                <FontAwesomeIcon icon={faPenToSquare} />
+                <button onClick={editDeckProperties}> Edit Deck</button>
+                <Cards
+                  currentDeck={deck}
+                  currentDeckId={props.match.params.id}
+                />
+              </div>
+            )}
+            {userEditing && (
+              <div>
+                <input
+                  name="name"
+                  id="name"
+                  type="text"
+                  placeholder="Deck Name"
+                  value={deck.name}
+                  onChange={(event) => {
+                    handleNameChange(event);
+                  }}
+                />
+                <input
+                  name="description"
+                  id="id"
+                  type="text"
+                  placeholder="Deck Description"
+                  value={deck.description}
+                  onChange={(event) => {
+                    handleNameChange(event);
+                  }}
+                />
+                <div className="small button-group">
+                  <a className="button" onClick={saveDeckProperties}>
+                    <FontAwesomeIcon icon={faCircleCheck} /> Save
+                  </a>
+                  <a className="button" onClick={deleteDeckProperties}>
+                    <FontAwesomeIcon icon={faTrash} /> Delete Deck
+                  </a>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default DeckShowPage
+export default DeckShowPage;

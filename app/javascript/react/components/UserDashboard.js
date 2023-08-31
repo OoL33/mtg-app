@@ -66,13 +66,14 @@ const UserDashboard = (props) => {
         <div>
           <h1>Welcome!</h1>
           <div className="grid-container">
-            <div className="grid-x grid-margin-x small-up-2 medium-up-3 large-up-4">
-              <div className="create-new-deck">
-                <h2>
+            <div className="grid-x grid-margin-x">
+              <div className="grid-container cell medium-6">
+                {/* <div className="grid-x grid-margin-x small-up-2 medium-up-3 large-up-4"> */}
+                <div className="create-new-deck">
                   <CreateNewDeckContainer />
-                </h2>
+                </div>
+                {deckTiles}
               </div>
-              {deckTiles}
             </div>
           </div>
         </div>
