@@ -13,6 +13,10 @@ const DeckShowPage = (props) => {
 
   const [deck, setDeck] = useState({});
 
+  useEffect(() => {
+    console.log("Updated deck:", deck);
+  }, [deck]);
+
   const fetchDeck = async () => {
     try {
       const deckId = props.match.params.id;
@@ -25,9 +29,9 @@ const DeckShowPage = (props) => {
       console.log(deckId);
       console.log("fetchDeck responseBody:");
       console.log(responseBody);
-      const singleDeckData = responseBody;
-      console.log(singleDeckData);
-      setDeck(singleDeckData);
+      //   const singleDeckData = responseBody;
+      console.log(`deck: ${responseBody.name}`);
+      setDeck(responseBody);
     } catch (error) {
       console.error(`Error in fetch: ${error.message}`);
     }
@@ -110,9 +114,9 @@ const DeckShowPage = (props) => {
         <div className="grid-container cell">
           <div className="callout grid-container form-container">
             {!userEditing && (
-              <div>
-                <h1>{deck.name}</h1>
-                <p>{deck.description}</p>
+              <div className="deck">
+                <h1 className="deck-title">{deck.name}</h1>
+                <p className="deck-description">{deck.description}</p>
                 <FontAwesomeIcon icon={faPenToSquare} />
                 <button onClick={editDeckProperties}> Edit Deck</button>
                 <Cards
