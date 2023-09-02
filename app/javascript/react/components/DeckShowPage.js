@@ -112,7 +112,7 @@ const DeckShowPage = (props) => {
     <div className="grid-container">
       <div className="grid-x grid-margin-x">
         <div className="grid-container cell">
-          <div className="callout grid-container form-container">
+          <div className="callout form-container">
             {!userEditing && (
               <div className="deck">
                 <h1 className="deck-title">{deck.name}</h1>

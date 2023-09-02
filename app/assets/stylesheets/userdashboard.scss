@@ -1,14 +1,15 @@
-.create-new-deck {
-	color: #000000;
-}
-
 body {
 	background: #d5d5d5;
 }
 
-// .card, h2 {
-// 	text-align: center;
-// }
+.create-new-deck-button {
+	color: #330C5C;
+	text-align: center;
+
+	&:hover{
+		color: #ffffff;
+	}
+}
 
 .cell{
 	margin-bottom: 1em;
@@ -20,6 +21,6 @@ body {
 	margin: 1em;
 	
 	&:hover{
-	  background-color: #D4A373;
+		background-color: #D4A373;
 	}
 }
