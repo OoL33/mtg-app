@@ -14,8 +14,8 @@ class Api::V1::DecksController < ApiController
 	def create
 		current_decks = current_user.decks
 		decks = Deck.new(name: deck_params[:name])
-		deck.description = deck_params[:description]
-		deck.user_id = current_user.id
+		decks.description = deck_params[:description]
+		decks.user_id = current_user.id
 
 		if decks.save!
 			render json: { decks: decks }

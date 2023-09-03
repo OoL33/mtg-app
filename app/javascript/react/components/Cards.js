@@ -2,15 +2,17 @@ import React, { useState, useEffect } from "react"
 import CardsInDeckTile from "./CardsInDeckTile"
 import SearchCardTile from "./SearchCardTile"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleCheck, faSpinner } from "@fortawesome/free-solid-svg-icons"
+import { faSpinner } from "@fortawesome/free-solid-svg-icons"
 
 const Cards = (props) => {
-	const [getCardsInDeck, setCardsInDeck] = useState([])
+	const [cardsInDeck, setCardsInDeck] = useState([])
 	const [searchCards, setSearchCards] = useState([])
 	const [searchString, setSearchString] = useState('')
 	const [searchCardTiles, setSearchCardTiles] = useState(null)
 	const [isLoading, setIsLoading] = useState(false)
 	const [selectedCard, setSelectedCard] = useState(null)
+  const [numOfCards, setNumOfCards] = useState(0)
+
 
 	const checkCardsInDeck = async() => {
 		try {
@@ -20,8 +22,6 @@ const Cards = (props) => {
         throw new Error(errorMessage)
       }
       const responseBody = await response.json()
-			console.log("checkCardsInDeck responseBody:")
-			console.log(responseBody.cards)
 			setCardsInDeck(responseBody.cards)
 		} catch (error) {
 			console.error(`Error in fetch: ${error.message}`)
@@ -42,7 +42,6 @@ const Cards = (props) => {
 		const body = JSON.stringify({
 			search_string: searchString
 		})
-		console.log('search FETCH body:', body)
 		setIsLoading(true)
 		try {
 			const response = await fetch('/api/v1/api_cards/search', {
@@ -59,7 +58,6 @@ const Cards = (props) => {
 				throw new Error(errorMessage)
 			}
 			const responseBody = await response.json()
-			console.log("handleSubmit responseBody:", responseBody)
 			setSearchCards(responseBody)
 		} catch (error) {
 			console.error(`Error in Fetch: ${error.message}`)
@@ -70,11 +68,10 @@ const Cards = (props) => {
 
 	useEffect(() => {
 		setSearchCardTiles(getSearchCardTiles)
-	}, [searchCards])
+	}, [searchCards, searchString])
 
 	const getSearchCardTiles = () => {
     if (searchCards && searchCards.cards) {
-		console.log('getSearchCardTiles - searchCards:', searchCards)
 		return searchCards.cards.map((card) => {
 			return(
 				<div key={card.id} onDoubleClick={() => setSelectedCard(card)}>
@@ -87,33 +84,70 @@ const Cards = (props) => {
 			)
 		})
   } else {
-    return null; // Return null or a placeholder if searchCards or searchCards.cards is undefined 
+    return null // Return null or a placeholder if searchCards or searchCards.cards is undefined 
   }
 	}
 
-	const addCardToDeck = async(card) => {
-		try {
-			const response = await fetch(`/api/v1/decks/${props.currentDeckId}/cards`, {
-				method: "POST",
-				credentials: "same-origin",
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ card, deck_id: props.currentDeckId })
-			})
-			console.log('addCardToDeck FETCH response:', response)
-		} catch (error) {
-			console.error(`Error in fetch: ${error.message}`)
-		}
-	}
+  const addCardToDeck = async (card) => {
+    try {
+      const response = await fetch(`/api/v1/decks/${props.currentDeckId}/cards`, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ card, deck_id: props.currentDeckId }),
+      })
+      if (response.ok) {
+        const responseBody = await response.json()
+        if (
+          (responseBody.deck.cards && responseBody.deck.cards.length)
+        ) {
+          setCardsInDeck(responseBody.deck.cards)
+          const numOfCards = responseBody.deck.cards.length
+          setNumOfCards(numOfCards)
+        } else {
+          console.error("Failed to add card to deck")
+        }
+      } else {
+        console.error(`Failed to fetch: ${response.status}`)
+      }
+    } catch (error) {
+      console.error(`Error in addCardToDeck fetch: ${error.message}`)
+    }
+  }
+
+  const removeCardFromDeck = async (selectedCard) => {
+    try {
+      const response = await fetch(`/api/v1/decks/${props.currentDeckId}/cards/${selectedCard.id}`, {
+        method: "DELETE", 
+        credentials: "same-origin",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+      if (!response.ok) {
+        const errorMessage = `${response.status} (${response.statusText})`
+        throw new Error(errorMessage)
+      } const remainingCardsInDeck = cardsInDeck.filter((cardInDeck) => {
+        return cardInDeck.id !== selectedCard.id
+      })
+      setCardsInDeck(remainingCardsInDeck)
+      setNumOfCards(remainingCardsInDeck.length)
+    } catch (error) { 
+      console.error(`Error in DELETE Card fetch: ${error.message}`)
+    } 
+  }
 
 	return(
 		<div className="deck-grid-container">
 			<CardsInDeckTile
-				getCardsInDeck={getCardsInDeck}
+				cardsInDeck={cardsInDeck}
+        removeCardFromDeck={removeCardFromDeck}
+        selectedCard={selectedCard}
 			/>
-			<a className="button" onClick={addCardToDeck}><FontAwesomeIcon icon={faCircleCheck} /> Add Card to Deck</a>
 			<form onSubmit={handleSubmit}>
 				<label>Search for a Card</label>
 				<input type='text' name='searchString' value={searchString} onChange={handleChange} />
