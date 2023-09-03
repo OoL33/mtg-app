@@ -58,21 +58,19 @@ const UserDashboard = (props) => {
   });
 
   return (
-    <div className="grid-container">
+    <div className="webpage">
       {renderError && (
         <span> User in path does not match with the user signed in </span>
       )}
       {!renderError && (
         <div>
           <h1>Welcome!</h1>
-          <div className="create-new-deck">
-            <h2>
-              <CreateNewDeckContainer />
-            </h2>
-          </div>
-          <div className="deck-grid-container">
+          <div className="grid-container">
             <div className="grid-x grid-margin-x">
-              <div className="grid-container cell medium">{deckTiles}</div>
+              <div className="grid-x grid-margin-x small-up-2 medium-up-3 large-up-4">
+                <CreateNewDeckContainer />
+                {deckTiles}
+              </div>
             </div>
           </div>
         </div>

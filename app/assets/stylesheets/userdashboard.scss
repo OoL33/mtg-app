@@ -1,23 +1,26 @@
 body {
-	background: hsl(0, 0%, 100%);
+	background: #d5d5d5;
 }
 
-#create_new_deck {
-	height: 100%;
-	width: 50%;
-	text-align: center;
-}
-
-.link {
-	color: #401b67;
-}
-
-.deck-grid-container {
-	color: #000000;
+.create-new-deck-button {
 	color: #330C5C;
+	text-align: center;
+
+	&:hover{
+		color: #ffffff;
+	}
 }
 
-.deck_tile {
+.cell{
+	margin-bottom: 1em;
+}
+
+.card {
+	background-color: #ffffff;
 	text-align: center;
-	color: #330C5C;
+	margin: 1em;
+	
+	&:hover{
+		background-color: #eedffb;
+	}
 }

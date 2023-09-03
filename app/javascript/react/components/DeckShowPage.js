@@ -11,12 +11,7 @@ import Cards from "./Cards";
 const DeckShowPage = (props) => {
   const history = useHistory();
 
-  const [deck, setDeck] = useState({
-    id: 0,
-    name: "",
-    description: "",
-    user_id: 0,
-  });
+  const [deck, setDeck] = useState({});
 
   const fetchDeck = async () => {
     try {
@@ -27,13 +22,7 @@ const DeckShowPage = (props) => {
         throw new Error(errorMessage);
       }
       const responseBody = await response.json();
-      const singleDeckData = responseBody.deck;
-      setDeck({
-        id: singleDeckData.id,
-        name: singleDeckData.name,
-        description: singleDeckData.description,
-        user_id: singleDeckData.user_id,
-      });
+      setDeck(responseBody.deck);
     } catch (error) {
       console.error(`Error in fetch: ${error.message}`);
     }
@@ -111,49 +100,57 @@ const DeckShowPage = (props) => {
   };
 
   return (
-    <div className="callout grid-container form-container deck-show">
-      {!userEditing && (
-        <div className="edit-deck">
-          <h1>{deck.name}</h1>
-          <p>{deck.description}</p>
-          <button className="edit-deck" onClick={editDeckProperties}>
-            <FontAwesomeIcon icon={faPenToSquare} /> Edit Deck
-          </button>
-          <Cards currentDeck={deck} currentDeckId={props.match.params.id} />
-        </div>
-      )}
-      {userEditing && (
-        <div>
-          <input
-            name="name"
-            id="name"
-            type="text"
-            placeholder="Deck Name"
-            value={deck.name}
-            onChange={(event) => {
-              handleNameChange(event);
-            }}
-          />
-          <input
-            name="description"
-            id="id"
-            type="text"
-            placeholder="Deck Description"
-            value={deck.description}
-            onChange={(event) => {
-              handleNameChange(event);
-            }}
-          />
-          <div className="small button-group">
-            <a className="button" onClick={saveDeckProperties}>
-              <FontAwesomeIcon icon={faCircleCheck} /> Save
-            </a>
-            <a className="button" onClick={deleteDeckProperties}>
-              <FontAwesomeIcon icon={faTrash} /> Delete Deck
-            </a>
+    <div className="grid-container">
+      <div className="grid-x grid-margin-x">
+        <div className="grid-container cell">
+          <div className="callout form-container">
+            {!userEditing && (
+              <div className="deck">
+                <h1 className="deck-title">{deck.name}</h1>
+                <p className="deck-description">{deck.description}</p>
+                <FontAwesomeIcon icon={faPenToSquare} />
+                <button onClick={editDeckProperties}> Edit Deck</button>
+                <Cards
+                  currentDeck={deck}
+                  currentDeckId={props.match.params.id}
+                />
+              </div>
+            )}
+            {userEditing && (
+              <div>
+                <input
+                  name="name"
+                  id="name"
+                  type="text"
+                  placeholder="Deck Name"
+                  value={deck.name}
+                  onChange={(event) => {
+                    handleNameChange(event);
+                  }}
+                />
+                <input
+                  name="description"
+                  id="id"
+                  type="text"
+                  placeholder="Deck Description"
+                  value={deck.description}
+                  onChange={(event) => {
+                    handleNameChange(event);
+                  }}
+                />
+                <div className="small button-group">
+                  <a className="button" onClick={saveDeckProperties}>
+                    <FontAwesomeIcon icon={faCircleCheck} /> Save
+                  </a>
+                  <a className="button" onClick={deleteDeckProperties}>
+                    <FontAwesomeIcon icon={faTrash} /> Delete Deck
+                  </a>
+                </div>
+              </div>
+            )}
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
