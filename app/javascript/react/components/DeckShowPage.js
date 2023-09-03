@@ -13,10 +13,6 @@ const DeckShowPage = (props) => {
 
   const [deck, setDeck] = useState({});
 
-  useEffect(() => {
-    console.log("Updated deck:", deck);
-  }, [deck]);
-
   const fetchDeck = async () => {
     try {
       const deckId = props.match.params.id;
@@ -26,12 +22,7 @@ const DeckShowPage = (props) => {
         throw new Error(errorMessage);
       }
       const responseBody = await response.json();
-      console.log(deckId);
-      console.log("fetchDeck responseBody:");
-      console.log(responseBody);
-      //   const singleDeckData = responseBody;
-      console.log(`deck: ${responseBody.name}`);
-      setDeck(responseBody);
+      setDeck(responseBody.deck);
     } catch (error) {
       console.error(`Error in fetch: ${error.message}`);
     }
