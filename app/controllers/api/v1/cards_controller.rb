@@ -14,7 +14,7 @@ class Api::V1::CardsController < ApiController
 
   def create
     deck = Deck.find_by(id: params[:deck_id])
-    card = find_or_create_card(deck)
+    card = find_or_create_card(deck, params)
   
     if card.persisted?
       deck.cards << card
@@ -34,10 +34,30 @@ class Api::V1::CardsController < ApiController
 	def update
 		deck = Deck.find(params[:deck_id])
 		card = Card.find_or_create_by(card_params)
+
 		unless deck.cards.include?(card)
 			deck.cards << card
 		end
+    render json: card, status: :ok
 	end
+
+  def destroy
+    # Get the deck_id and card_id parameters from the request
+    deck_id = params[:deck_id]
+    card_id = params[:id]
+    
+    # Find the deck_card row with the specified card_id and deck_id
+    deck_card = DeckCard.find_by(deck_id: deck_id, card_id: card_id)
+
+    if deck_card.nil?
+      # The card is not in the deck, handle this error case as appropriate
+      render json: { error: 'No card found' }, status: :not_found
+    else
+      # Delete the deck_card row
+      deck_card.destroy
+      render json: { message: 'Card successfully removed from the deck' }, status: :ok
+    end
+  end
 
 	private
 
@@ -45,7 +65,7 @@ class Api::V1::CardsController < ApiController
 		params.require(:card).permit(:name, :colors, :image_urls, external_ids: [])
 	end
 
-  def find_or_create_card(deck)
+  def find_or_create_card(deck, params)
     return Card.new(card_params.merge(external_ids: params[:card][:external_ids])) unless params[:card].present?
 
     external_ids = params[:card][:external_ids].map(&:to_i)
