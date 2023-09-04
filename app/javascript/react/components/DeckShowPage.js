@@ -108,8 +108,9 @@ const DeckShowPage = (props) => {
               <div className="deck">
                 <h1 className="deck-title">{deck.name}</h1>
                 <p className="deck-description">{deck.description}</p>
-                <FontAwesomeIcon icon={faPenToSquare} />
-                <button onClick={editDeckProperties}> Edit Deck</button>
+                <button className="button" onClick={editDeckProperties}>
+                  <FontAwesomeIcon icon={faPenToSquare} />
+                </button>
                 <Cards
                   currentDeck={deck}
                   currentDeckId={props.match.params.id}
