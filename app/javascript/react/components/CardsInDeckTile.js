@@ -2,14 +2,18 @@ import React from "react";
 
 const CardsInDeckTile = (props) => {
   const showCardsInDeck = () => {
-    return props.getCardsInDeck.map((card) => (
-      <div key={card.uniqueId}>
-        <p>
-          {card.id}: {card.name}
-          <img src={card.image_urls} alt={card.name} />
-        </p>
+    return (
+      <div className="grid-x">
+        {props.getCardsInDeck.map((card) => (
+          <div
+            className="card-tile cell small-6 medium-4 large-4"
+            key={card.uniqueId}
+          >
+            <img src={card.image_urls} alt={card.name} />
+          </div>
+        ))}
       </div>
-    ));
+    );
   };
 
   return <div>{showCardsInDeck()}</div>;
