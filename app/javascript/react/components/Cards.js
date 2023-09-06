@@ -130,39 +130,41 @@ const Cards = (props) => {
 
   return (
     <div className="deck-grid-container">
-      <CardsInDeckTile getCardsInDeck={getCardsInDeck} />
-      <form onSubmit={handleSubmit}>
-        <label>Search for a Card</label>
-        <input
-          type="text"
-          name="searchString"
-          value={searchString}
-          onChange={handleChange}
-        />
-        <input type="submit" value="Submit" />
-      </form>
-      <div className="deck-grid-container">
-        <div className="grid-x grid-margin-x">
-          <div className="grid-container cell medium">
-            {isLoading && (
-              <p>
-                <FontAwesomeIcon icon={faSpinner} />
-                Searching for Cards...
-              </p>
-            )}
-            {searchCardTiles}
-            <a className="button" onClick={addCardToDeck}>
-              <FontAwesomeIcon icon={faCircleCheck} /> Add Card to Deck
-            </a>
-          </div>
-          {deleteSuccess && <p>Card deleted successfully!</p>}
-          {deleteError && <p>Error: {deleteError}</p>}
-          <CardDeletion
-            cardId={selectedCard?.id}
-            deckId={props.currentDeckId}
-            onDeleteSuccess={handleDeleteSuccess}
-            onDeleteError={handleDeleteError}
+      <div className="grid-container">
+        <CardsInDeckTile getCardsInDeck={getCardsInDeck} />
+        <form onSubmit={handleSubmit}>
+          <label>Search for a Card</label>
+          <input
+            type="text"
+            name="searchString"
+            value={searchString}
+            onChange={handleChange}
           />
+          <input type="submit" value="Submit" />
+        </form>
+        <div className="deck-grid-container">
+          <div className="grid-x grid-margin-x">
+            <div className="grid-container cell medium">
+              {isLoading && (
+                <p>
+                  <FontAwesomeIcon icon={faSpinner} />
+                  Searching for Cards...
+                </p>
+              )}
+              {searchCardTiles}
+              <a className="button" onClick={addCardToDeck}>
+                <FontAwesomeIcon icon={faCircleCheck} /> Add Card to Deck
+              </a>
+            </div>
+            {deleteSuccess && <p>Card deleted successfully!</p>}
+            {deleteError && <p>Error: {deleteError}</p>}
+            <CardDeletion
+              cardId={selectedCard?.id}
+              deckId={props.currentDeckId}
+              onDeleteSuccess={handleDeleteSuccess}
+              onDeleteError={handleDeleteError}
+            />
+          </div>
         </div>
       </div>
     </div>
