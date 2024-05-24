@@ -7,6 +7,16 @@
 # Ignore bundler config.
 /.bundle
 
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+/bin/
+/dist/
+/vendor/
+
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*
@@ -28,3 +38,7 @@
 /node_modules
 yarn-debug.log*
 .yarn-integrity
+
+# IDEs and editors
+.idea/
+.vscode/
