@@ -2,7 +2,7 @@ package config
 
 import (
 	"fmt"
-	"os"
+	"log"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -11,16 +11,11 @@ import (
 var DB *gorm.DB
 
 func InitDB() {
+	dsn := "host=localhost user=your_username password=your_password dbname=breakable_toy_development port=5432 sslmode=disable"
 	var err error
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai",
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_NAME"),
-		os.Getenv("DB_PORT"),
-	)
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("failed to connect database")
+		log.Fatalf("failed to connect to database: %v", err)
 	}
+	fmt.Println("Database connection successfully opened")
 }

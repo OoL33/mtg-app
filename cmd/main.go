@@ -15,9 +15,7 @@ import (
 
 func main() {
 	config.InitDB()
-
-	// Auto Migrate the schema
-	config.DB.AutoMigrate(&models.User{}, &models.Post{})
+	config.DB.AutoMigrate(&models.User{}, &models.Deck{}, &models.Card{})
 
 	r := mux.NewRouter()
 
