@@ -16,6 +16,10 @@
 /log/*
 /tmp/*
 
+/node_modules
+/public/assets
+.byebug_history
+
 # Ignore code coverage reports
 /coverage/
 
