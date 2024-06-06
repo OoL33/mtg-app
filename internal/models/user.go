@@ -7,12 +7,11 @@ import (
 
 type User struct {
 	gorm.Model
-	ID       uint
 	Username string `gorm:"uniqueIndex;size:255"`
 	Email    string `gorm:"unique;size:255"`
 	Password string `gorm:"size:255"`
 	Decks    []Deck `gorm:"foreignKey:UserID"`
-	Cards    []Card `gorm:"foreignKey:UserID"`
+	Cards    []Card `gorm:"many2many:user_cards"`
 }
 
 func (u *User) HashPassword(password string) error {
