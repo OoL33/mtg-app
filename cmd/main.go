@@ -4,12 +4,11 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/OoL33/mtg-app/components"
 	"github.com/OoL33/mtg-app/config"
-
 	"github.com/OoL33/mtg-app/internal/handlers"
-
 	"github.com/OoL33/mtg-app/internal/models"
-
+	"github.com/a-h/templ"
 	"github.com/gorilla/mux"
 )
 
@@ -19,6 +18,23 @@ func main() {
 
 	r := mux.NewRouter()
 
+	// Serve static files
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
+
+	// Serve index page
+	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "views/index.html")
+	}).Methods("GET")
+
+	// Initialize routes
 	handlers.InitializeRoutes(r)
-	log.Fatal(http.ListenAndServe(":8080", r))
+
+	// Templ routes
+	r.Handle("/", templ.Handler(components.IndexTemplate)).Methods("GET")
+	r.Handle("/login", templ.Handler(components.LoginTemplate)).Methods("GET")
+
+	log.Println("Server started on :8080")
+	if err := http.ListenAndServe(":8080", r); err != nil {
+		log.Fatal(err)
+	}
 }

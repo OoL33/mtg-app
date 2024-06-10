@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"html/template"
 
 	"github.com/OoL33/mtg-app/config"
 	"github.com/lib/pq"
@@ -21,6 +22,29 @@ func InitializeRoutes(r *mux.Router) {
 	r.HandleFunc("/cards", GetCards).Methods("GET")
 	r.HandleFunc("/cards", CreateCard).Methods("POST")
 	r.HandleFunc("/cards/scryfall", FetchScryfallCard).Methods("GET")
+	r.HandleFunc("/login", ShowLoginForm).Methods("GET")
+	r.HandleFunc("/login", HandleLogin).Methods("POST")
+}
+
+func ShowLoginForm(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles("views/login.templ")
+	if err != nil {
+		http.Error(w, "Failed to load login form", http.StatusInternalServerError)
+		return
+	}
+	tmpl.Execute(w, nil)
+}
+
+func HandleLogin(w http.ResponseWriter, r *http.Request) {
+	username := r.FormValue("username")
+	password := r.FormValue("password")
+
+	// Dummy check for demonstration
+	if username == "admin" && password == "password" {
+		w.Write([]byte("Login successful!"))
+	} else {
+		w.Write([]byte("Invalid credentials"))
+	}
 }
 
 func GetUsers(w http.ResponseWriter, r *http.Request) {

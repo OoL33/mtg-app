@@ -1,0 +1,34 @@
+package main
+
+templ LoginForm() {
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="/static/node_modules/htmx.org/dist/htmx.js"></script>
+    <script src="/static/node_modules/templ/templ.js"></script>
+    </head>
+    <body>
+        <nav>
+            <ul>
+                <li><a href="/login" hx-get="/login">Login</a></li>
+                <li><a href="/signup" hx-get="/signup">Sign Up</a></li>
+            </ul>
+        </nav>
+        <form hx-post="/login" hx-target="#result" hx-swap="innerHTML">
+            <div>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <div id="result"></div>
+    </body>
+    </html>
+}
