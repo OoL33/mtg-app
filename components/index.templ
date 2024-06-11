@@ -1,37 +1,33 @@
-package main
-
-// import (
-//     "github.com/a-h/templ"
-// )
+package components
 
 templ Index() {
     <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MTG App</title>
-    <script src="/static/node_modules/htmx.org/dist/htmx.js"></script>
-    <script src="/static/node_modules/templ/templ.js"></script>
-</head>
-<body>
-    <header>
-        <h1>Welcome to MTG App</h1>
-        <nav>
-            <ul>
-                <li><a href="/login" hx-get="/login" hx-target="body" hx-swap="innerHTML">Login</a></li>
-                <li><a href="/signup" hx-get="/signup" hx-target="body" hx-swap="innerHTML">Sign Up</a></li>
-            </ul>
-        </nav>
-    </header>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>MTG App</title>
+        <script src="/static/node_modules/htmx.org/dist/htmx.js"></script>
+        <script src="/static/node_modules/templ/templ.js"></script>
+    </head>
+    <body>
+        <header>
+            <h1>Welcome to MTG App</h1>
+            <nav>
+                <ul>
+                    <li><a href="/login" hx-get="/login" hx-target="body" hx-swap="innerHTML">Login</a></li>
+                    <li><a href="/signup" hx-get="/signup" hx-target="body" hx-swap="innerHTML">Sign Up</a></li>
+                </ul>
+            </nav>
+        </header>
 
-    <main>
-        <a href="/login" hx-get="/login" hx-target="body" hx-swap="innerHTML">Login</a>
-    </main>
+        <main>
+            <a href="/login" hx-get="/login" hx-target="body" hx-swap="innerHTML">Login</a>
+        </main>
 
-    <footer>
-        <p>© 2024 MTG App</p>
-    </footer>
-</body>
-</html>
+        <footer>
+            <p>© 2024 MTG App</p>
+        </footer>
+    </body>
+    </html>
 }

@@ -23,15 +23,15 @@ func main() {
 
 	// Serve index page
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "views/index.html")
+		http.ServeFile(w, r, "../components.index.templ")
 	}).Methods("GET")
 
 	// Initialize routes
 	handlers.InitializeRoutes(r)
 
 	// Templ routes
-	r.Handle("/", templ.Handler(components.IndexTemplate)).Methods("GET")
-	r.Handle("/login", templ.Handler(components.LoginTemplate)).Methods("GET")
+	r.Handle("/", templ.Handler(components.Index)).Methods("GET")
+	r.Handle("/login", templ.Handler(components.LoginForm)).Methods("GET")
 
 	log.Println("Server started on :8080")
 	if err := http.ListenAndServe(":8080", r); err != nil {
