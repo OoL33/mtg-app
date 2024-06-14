@@ -23,7 +23,7 @@ func Index() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>MTG App</title><script src=\"/static/node_modules/htmx.org/dist/htmx.js\"></script><script src=\"/static/node_modules/templ/templ.js\"></script></head><body><header><h1>Welcome to MTG App</h1><nav><ul><li><a href=\"/login\" hx-get=\"/login\" hx-target=\"body\" hx-swap=\"innerHTML\">Login</a></li><li><a href=\"/signup\" hx-get=\"/signup\" hx-target=\"body\" hx-swap=\"innerHTML\">Sign Up</a></li></ul></nav></header><main><a href=\"/login\" hx-get=\"/login\" hx-target=\"body\" hx-swap=\"innerHTML\">Login</a></main><footer><p>© 2024 MTG App</p></footer></body></html>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>MTG App</title><script>\n            console.log(\"Loading htmx.min.js from /static/htmx.min.js\");\n        </script><script src=\"/static/htmx.min.js\"></script></head><body><header><h1>Welcome to MTG App</h1><nav><ul><li><a href=\"/login\" hx-get=\"/login\" hx-target=\"body\" hx-swap=\"innerHTML\">Login</a></li><li><a href=\"/signup\" hx-get=\"/signup\" hx-target=\"body\" hx-swap=\"innerHTML\">Sign Up</a></li></ul></nav></header><main><a href=\"/login\" hx-get=\"/login\" hx-target=\"body\" hx-swap=\"innerHTML\">Login</a></main><footer><p>© 2024 MTG App</p></footer></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "htmx": "^0.0.2",
+    "htmx.org": "^1.9.12",
     "templ": "^1.4.3"
   }
 }
