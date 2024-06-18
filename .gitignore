@@ -1,6 +1,7 @@
 # IDEs and editors
 .idea/
 .vscode/
+.DS_Store
 
 # Binaries
 *.exe
@@ -18,7 +19,13 @@
 
 static/node_modules
 /node_modules
+
+# Public assets
 /public/assets
+/public/packs
+/public/packs-test
+
+# Byebug history
 .byebug_history
 
 # Ignore code coverage reports
@@ -31,6 +38,37 @@ static/node_modules
 # Ignore sensitive information and generated files
 /config/master.key
 .env
-/public/packs
-/public/packs-test
-/node_modules
+
+# Tailwind CSS output
+output.css
+
+# General backup and temporary files
+*.bak
+*.tmp
+*.swp
+
+# Go build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+*.o
+*.a
+
+# Go vendor directory
+/vendor/
+
+# Log files
+*.log
+
+# Temporary files created by editors
+*.sublime-project
+*.sublime-workspace
+*.tmproj
+*.tm_properties
+
+# Specific files
+static/htmx.min.js
